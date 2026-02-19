@@ -1,0 +1,1 @@
+"""Notifications app - backend only."""

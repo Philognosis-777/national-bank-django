@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}National Bank of Ethiopia{% endblock %}</title>
+
+    {# Vendor CSS (local) #}
+    <link rel="stylesheet" href="{% static 'core/vendors/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'core/vendors/fontawesome/css/all.min.css' %}">
+
+    {# Layout CSS #}
+    <link rel="stylesheet" href="{% static 'core/css/layout/base.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/layout/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/layout/footer.css' %}">
+
+    {# Page CSS: `page_name` provided by view/context; default to 'home' #}
+    {% with page=page_name|default:"home" %}
+      <link rel="stylesheet" href="{% static 'core/css/pages/'|add:page|add:'.css' %}">
+    {% endwith %}
+
+</head>
+
+<body class="page-{{ page_name|default:'home' }}">
+
+    {% include 'core/includes/navbar.html' %}
+
+    <main id="mainContent">
+      {% block content %}{% endblock %}
+    </main>
+
+    {% include 'core/includes/footer.html' %}
+
+    {# Vendor JS (local) #}
+    <script src="{% static 'core/vendors/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'core/vendors/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    {# Layout JS #}
+    <script src="{% static 'core/js/layout/base.js' %}"></script>
+    <script src="{% static 'core/js/layout/navbar.js' %}"></script>
+    <script src="{% static 'core/js/layout/footer.js' %}"></script>
+
+    {# Page JS #}
+    {% with page=page_name|default:"home" %}
+      <script src="{% static 'core/js/pages/'|add:page|add:'.js' %}"></script>
+    {% endwith %}
+</body>
+</html>

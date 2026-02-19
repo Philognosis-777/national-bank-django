@@ -1,0 +1,51 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>About National Bank of Esethiopia</title>
+	<link rel="stylesheet" href="{% static 'core/vendors/bootstrap/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'core/vendors/fontawesome/css/all.min.css' %}">
+	<link rel="stylesheet" href="{% static 'core/css/pages/intro.css' %}">
+</head>
+<body>
+	<header class="bg-primary text-white py-3">
+		<div class="container d-flex align-items-center justify-content-between">
+			<div>
+				<h1 class="h4 mb-0">National Bank of Ethiopia</h1>
+				<small class="d-block">Ensuring Financial Stability for a Prosperous Ethiopia</small>
+			</div>
+			<div class="auth-btns">
+				<a class="btn btn-outline-light me-2" href="{% url 'accounts:login' %}">Log In</a>
+				<a class="btn btn-light" href="{% url 'accounts:register' %}">Sign Up</a>
+			</div>
+		</div>
+	</header>
+
+	<main class="container hero">
+		<div class="row w-100">
+			<div class="col-lg-8 mx-auto text-center">
+				<img src="{% static 'core/images/logo.png' %}" alt="NBE logo" class="mb-3" style="max-height:80px">
+				<h2 class="mb-3">About the Bank</h2>
+				<p class="lead">The National Bank of Ethiopia is the country's central bank, responsible for formulating and implementing monetary policy, supervising financial institutions, issuing currency, and supporting the sustainable growth of the national economy. We work to preserve price stability, foster a sound financial system, and promote economic development for the benefit of all Ethiopians.</p>
+				<p class="mb-4">የኢትዮጵያ ብሔራዊ ባንክ የሀገሩ ማዕከላዊ ባንክ ሲሆን የገንዘብ ፖሊሲን ለማቀናበር፣ የፋይናንስ ተቋማትን ለማስተዳደር፣ ገንዘብ ለማቅረብና ለኢኮኖሚያዊ እድገት ድጋፍ ይሰጣል።</p>
+				<div class="d-flex justify-content-center gap-3">
+					<a class="btn btn-primary" href="{% url 'accounts:register' %}">Create an Account</a>
+					<a class="btn btn-outline-secondary" href="{% url 'accounts:login' %}">Sign In</a>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<footer class="text-center py-4">
+		<div class="container">
+			<small>© 2025 National Bank of Ethiopia. All rights reserved.</small>
+		</div>
+	</footer>
+
+	<script src="{% static 'core/vendors/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+	<script src="{% static 'core/js/pages/intro.js' %}"></script>
+</body>
+</html>
+

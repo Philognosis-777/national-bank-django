@@ -1,0 +1,246 @@
+/* hamburger.css */
+/* Page-specific styles for the Hamburger Menu (Bank Services & Menu) */
+
+/* ===== Menu Header ===== */
+.menu-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
+
+.menu-header h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.5rem;
+}
+
+.menu-header h2.amharic {
+  font-size: 2rem;
+  font-family: var(--font-amharic);
+}
+
+.menu-header p {
+  font-size: 1.1rem;
+  color: var(--gray);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.menu-header p.amharic {
+  font-family: var(--font-amharic);
+}
+
+/* ===== Menu Grid ===== */
+.menu-grid {
+  margin: 2rem 0;
+}
+
+.menu-card {
+  background: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: var(--transition);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(11, 31, 58, 0.05);
+  overflow: hidden;
+}
+
+.menu-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--box-shadow-hover);
+  border-color: var(--gold);
+}
+
+.menu-icon {
+  background: linear-gradient(135deg, var(--navy) 0%, #1a3352 100%);
+  color: var(--gold);
+  font-size: 2.5rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.menu-icon i {
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.menu-content {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-content h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 0.75rem;
+}
+
+.menu-content h3.amharic {
+  font-family: var(--font-amharic);
+  font-size: 1.2rem;
+}
+
+.menu-content p {
+  font-size: 0.9rem;
+  color: var(--gray);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.menu-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  color: var(--navy);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: var(--transition);
+  border-bottom: 1px solid transparent;
+}
+
+.menu-link i {
+  color: var(--gold);
+  width: 1.2rem;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.menu-link:hover {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+  padding-left: 0.5rem;
+}
+
+.menu-link:hover i {
+  transform: scale(1.1);
+}
+
+.menu-link .amharic {
+  font-family: var(--font-amharic);
+}
+
+/* ===== Quick Actions ===== */
+.quick-actions .card {
+  border: 1px solid rgba(11, 31, 58, 0.1);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  margin-bottom: 3rem;
+}
+
+.quick-actions .card-header {
+  background-color: var(--navy);
+  color: var(--white);
+  padding: 1rem 1.5rem;
+  border-bottom: 2px solid var(--gold);
+}
+
+.quick-actions .card-header h4 {
+  color: var(--white);
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.quick-actions .card-header h4.amharic {
+  font-family: var(--font-amharic);
+}
+
+.quick-actions .card-body {
+  padding: 1.5rem;
+  background-color: var(--white);
+}
+
+.quick-action-btn {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--gray-light);
+  border: 1px solid rgba(11, 31, 58, 0.1);
+  border-radius: 6px;
+  color: var(--navy);
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.quick-action-btn i {
+  font-size: 1.8rem;
+  color: var(--gold);
+  transition: var(--transition);
+}
+
+.quick-action-btn:hover {
+  background-color: var(--gold);
+  color: var(--navy);
+  transform: translateY(-3px);
+  box-shadow: var(--box-shadow-hover);
+  border-color: var(--gold);
+}
+
+.quick-action-btn:hover i {
+  color: var(--navy);
+}
+
+.quick-action-btn .amharic {
+  font-family: var(--font-amharic);
+  font-size: 0.9rem;
+}
+
+/* ===== Responsive Adjustments ===== */
+@media (max-width: 767px) {
+  .menu-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .menu-header h2.amharic {
+    font-size: 1.6rem;
+  }
+
+  .menu-header p {
+    font-size: 1rem;
+  }
+
+  .menu-icon {
+    font-size: 2rem;
+    padding: 1rem;
+  }
+
+  .quick-action-btn {
+    font-size: 0.9rem;
+  }
+
+  .quick-action-btn i {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 575px) {
+  .menu-content h3 {
+    font-size: 1.1rem;
+  }
+
+  .menu-content p {
+    font-size: 0.85rem;
+  }
+
+  .menu-link {
+    font-size: 0.85rem;
+  }
+}

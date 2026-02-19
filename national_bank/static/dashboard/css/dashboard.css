@@ -1,0 +1,6 @@
+/* Dashboard CSS placeholder */
+.dashboard-grid{display:grid;grid-template-columns:1fr 320px;gap:1rem}
+.widget{background:#fff;border-radius:.5rem;padding:1rem}
+/* Dashboard app static CSS (placeholder) */
+.dashboard-widget{padding:.75rem;border-radius:.5rem;background:linear-gradient(180deg, #fff, #f8fafc)}
+.dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}

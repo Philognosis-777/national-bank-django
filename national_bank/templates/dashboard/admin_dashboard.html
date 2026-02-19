@@ -1,0 +1,57 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<main class="container my-5">
+	<div class="d-flex justify-content-between align-items-center mb-4">
+		<h1 class="h3">Admin Dashboard</h1>
+		<div>
+			<a class="btn btn-sm btn-outline-secondary" href="{% url 'admin:index' %}">Admin site</a>
+		</div>
+	</div>
+
+	<div class="row g-3">
+		<div class="col-md-3">
+			<div class="card text-white bg-primary h-100">
+				<div class="card-body">
+					<h5 class="card-title">Users</h5>
+					<p class="card-text display-6">{{ stats.users|default:0 }}</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="card text-white bg-success h-100">
+				<div class="card-body">
+					<h5 class="card-title">Institutions</h5>
+					<p class="card-text display-6">{{ stats.institutions|default:0 }}</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="card text-white bg-info h-100">
+				<div class="card-body">
+					<h5 class="card-title">Indicators</h5>
+					<p class="card-text display-6">{{ stats.indicators|default:0 }}</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="card text-white bg-warning h-100">
+				<div class="card-body">
+					<h5 class="card-title">News</h5>
+					<p class="card-text display-6">{{ stats.news|default:0 }}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<section class="mt-4">
+		<h3>Recent Activity</h3>
+		<div class="list-group">
+			{% for item in recent %}
+				<div class="list-group-item">{{ item }}</div>
+			{% empty %}
+				<div class="list-group-item">No recent activity.</div>
+			{% endfor %}
+		</div>
+	</section>
+</main>
+{% endblock %}

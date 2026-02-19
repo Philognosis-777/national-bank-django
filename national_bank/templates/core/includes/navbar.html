@@ -1,0 +1,64 @@
+{% load static %}
+
+<header class="main-header">
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <!-- Brand/Logo -->
+            <a class="navbar-brand" href="{% url 'core:home' %}">
+                <img src="{% static 'core/images/logo.png' %}" alt="National Bank of Ethiopia" height="50">
+                <div class="brand-text">
+                    <h1 class="english">National Bank of Ethiopia</h1>
+                    <h1 class="amharic">የኢትዮጵያ ብሔራዊ ባንክ</h1>
+                    <p class="tagline english">Financial Stability & Economic Growth</p>
+                    <p class="tagline amharic">የገንዘብ መረጋጋት እና ኢኮኖሚያዊ እድገት</p>
+                </div>
+            </a>
+
+            <div class="d-lg-none">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'core:home' %}">
+                            <i class="fas fa-home"></i>
+                            <span class="english">Home</span>
+                            <span class="amharic">መነሻ</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'news:dashboard-news-summary' %}">
+                            <i class="fas fa-newspaper"></i>
+                            <span class="english">News</span>
+                            <span class="amharic">ዜና</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'market:dashboard-market-summary' %}">
+                            <i class="fas fa-chart-line"></i>
+                            <span class="english">Market</span>
+                            <span class="amharic">ገበያ</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:hamburger' %}">
+                            <i class="fas fa-bars"></i>
+                            <span class="english">Menu</span>
+                            <span class="amharic">ምናሌ</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="language-toggle ms-lg-3 mt-3 mt-lg-0">
+                    <button id="langToggle" class="lang-toggle-btn">
+                        <span class="lang-text">አማርኛ</span>
+                        <i class="fas fa-globe-africa"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

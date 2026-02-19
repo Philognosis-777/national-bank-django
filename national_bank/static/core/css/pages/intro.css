@@ -1,0 +1,187 @@
+/* intro.css */
+/* Intro page (About National Bank of Ethiopia) – Professional financial style */
+
+:root {
+  --navy: #0B1F3A;
+  --gold: #C6A75E;
+  --white: #FFFFFF;
+  --gray-light: #F8F9FA;
+  --gray: #6C757D;
+  --transition: all 300ms ease;
+  --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-amharic: 'Noto Sans Ethiopic', 'Nyala', 'Abyssinica SIL', serif;
+}
+
+body {
+  font-family: var(--font-primary);
+  color: var(--gray-dark);
+  background-color: var(--white);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* Override Bootstrap primary color */
+.bg-primary {
+  background-color: var(--navy) !important;
+}
+
+.btn-primary {
+  background-color: var(--gold) !important;
+  border-color: var(--gold) !important;
+  color: var(--navy) !important;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: transparent !important;
+  border-color: var(--gold) !important;
+  color: var(--gold) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--box-shadow);
+}
+
+.btn-outline-light {
+  border-color: var(--white) !important;
+  color: var(--white) !important;
+}
+
+.btn-outline-light:hover {
+  background-color: var(--gold) !important;
+  border-color: var(--gold) !important;
+  color: var(--navy) !important;
+}
+
+.btn-light {
+  background-color: var(--white) !important;
+  border-color: var(--white) !important;
+  color: var(--navy) !important;
+}
+
+.btn-light:hover {
+  background-color: var(--gold) !important;
+  border-color: var(--gold) !important;
+  color: var(--navy) !important;
+}
+
+.btn-outline-secondary {
+  border-color: var(--navy) !important;
+  color: var(--navy) !important;
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--navy) !important;
+  border-color: var(--navy) !important;
+  color: var(--white) !important;
+}
+
+/* Header customizations */
+header.bg-primary {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+header small {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+/* Hero section */
+.hero {
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.hero img {
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+}
+
+.hero h2 {
+  color: var(--navy);
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero .lead {
+  font-size: 1.2rem;
+  color: var(--gray);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Amharic text styling */
+.hero p:last-of-type {
+  font-family: var(--font-amharic);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--navy);
+  background-color: var(--gray-light);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--gold);
+  margin-top: 2rem;
+}
+
+/* Footer */
+footer {
+  background-color: var(--gray-light);
+  color: var(--gray);
+  border-top: 1px solid rgba(11, 31, 58, 0.1);
+}
+
+footer small {
+  font-size: 0.9rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero {
+    padding: 2rem 1rem;
+  }
+
+  .hero h2 {
+    font-size: 2rem;
+  }
+
+  .hero .lead {
+    font-size: 1rem;
+  }
+
+  .hero p:last-of-type {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+
+  header .container {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .auth-btns {
+    margin-top: 0.5rem;
+  }
+}
+
+/* Accessibility focus */
+.btn:focus,
+.btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}

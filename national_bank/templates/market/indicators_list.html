@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<main class="container my-5">
+	<div class="d-flex justify-content-between align-items-center mb-3">
+		<h1 class="h3">Market Indicators</h1>
+		<div>
+			<a class="btn btn-sm btn-primary" href="{% url 'market:indicator-create' %}">Add Indicator</a>
+		</div>
+	</div>
+
+	<p class="text-muted">Key economic and market indicators published by the bank.</p>
+
+	<div class="list-group">
+		{% for ind in indicators %}
+			<a href="{% url 'market:indicator-detail' ind.id %}" class="list-group-item list-group-item-action">
+				<div class="d-flex w-100 justify-content-between">
+					<h5 class="mb-1">{{ ind.name }}</h5>
+					<small class="text-muted">{{ ind.reference_period }}</small>
+				</div>
+				<p class="mb-1">{{ ind.value }} {{ ind.unit }}</p>
+			</a>
+		{% empty %}
+			<div class="list-group-item">No indicators available.</div>
+		{% endfor %}
+	</div>
+</main>
+{% endblock %}

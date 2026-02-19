@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Regulations - National Bank{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+	<h1>Regulations</h1>
+	<p class="lead">Banking regulations, circulars, and guidance documents issued by the National Bank.</p>
+
+	<div class="mb-3">
+		<a class="btn btn-outline-primary" href="{% url 'core:legal-framework' %}">Legal Framework</a>
+		<a class="btn btn-outline-secondary" href="{% url 'core:monetary-policy' %}">Monetary Policy</a>
+	</div>
+
+	<div class="list-group">
+		<a class="list-group-item" href="#">Regulation 1 (PDF)</a>
+		<a class="list-group-item" href="#">Regulation 2 (PDF)</a>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,261 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="{% static 'core/css/pages/hamburger.css' %}">
+    <script defer src="{% static 'core/js/pages/hamburger.js' %}"></script>
+</head>
+<body>
+<main class="container mt-5">
+                <div class="menu-header">
+                                <button id="hamburgerBtn" class="hamburger-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            <h2 class="english">Bank Services &amp; Menu</h2>
+            <h2 class="amharic">የባንክ አገልግሎቶች እና ምናሌ</h2>
+            <p class="english">Access all banking services, information, and resources in one place.</p>
+            <p class="amharic">ሁሉንም የባንክ አገልግሎቶች፣ መረጃዎች እና ሀብቶች በአንድ ቦታ ያግኙ።</p>
+        </div>
+        
+        <!-- Menu Grid -->
+        <div class="menu-grid">
+            <div class="row">
+                <!-- Banking Services -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="menu-card">
+                        <div class="menu-icon">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div class="menu-content">
+                            <h3 class="english">Banking Services</h3>
+                            <h3 class="amharic">የባንክ አገልግሎቶች</h3>
+                            <p class="english">Access all banking services including accounts, loans, and digital banking.</p>
+                            <p class="amharic">መለያዎች፣ የብድር አገልግሎቶች እና ዲጂታል ባንክን ጨምሮ ሁሉንም የባንክ አገልግሎቶች ያግኙ።</p>
+                            <div class="menu-links">
+                                <a href="{% url 'core:home' %}" class="menu-link">
+                                    <i class="fas fa-piggy-bank"></i>
+                                    <span class="english">Open Account</span>
+                                    <span class="amharic">መለያ ክፈት</span>
+                                </a>
+                                <a href="{% url 'core:home' %}" class="menu-link">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                    <span class="english">Apply for Loan</span>
+                                    <span class="amharic">ለብድር አመልከት</span>
+                                </a>
+                                <a href="{% url 'core:home' %}" class="menu-link">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    <span class="english">Digital Banking</span>
+                                    <span class="amharic">ዲጂታል ባንክ</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Financial Information -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="menu-card">
+                        <div class="menu-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="menu-content">
+                            <h3 class="english">Financial Information</h3>
+                            <h3 class="amharic">የገንዘብ መረጃ</h3>
+                            <p class="english">Access financial reports, statistics, and economic indicators.</p>
+                            <p class="amharic">የገንዘብ ሪፖርቶች፣ ስታቲስቲክስ እና ኢኮኖሚያዊ መረጃዎችን ያግኙ።</p>
+                            <div class="menu-links">
+                                <a href="{% url 'core:financial-reports' %}" class="menu-link">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                    <span class="english">Financial Reports</span>
+                                    <span class="amharic">የገንዘብ ሪፖርቶች</span>
+                                </a>
+                                <a href="{% url 'core:statistics' %}" class="menu-link">
+                                    <i class="fas fa-chart-pie"></i>
+                                    <span class="english">Statistics</span>
+                                    <span class="amharic">ስታቲስቲክስ</span>
+                                </a>
+                                <a href="{% url 'core:economic-indicators' %}" class="menu-link">
+                                    <i class="fas fa-balance-scale"></i>
+                                    <span class="english">Economic Indicators</span>
+                                    <span class="amharic">ኢኮኖሚያዊ መረጃዎች</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Regulations -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="menu-card">
+                        <div class="menu-icon">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <div class="menu-content">
+                            <h3 class="english">Regulations &amp; Policies</h3>
+                            <h3 class="amharic">ደንቦች እና ፖሊሲዎች</h3>
+                            <p class="english">Access banking regulations, monetary policies, and legal frameworks.</p>
+                            <p class="amharic">የባንክ ደንቦች፣ የገንዘብ ፖሊሲዎች እና ህጋዊ አሰጣጦችን ያግኙ።</p>
+                            <div class="menu-links">
+                                <a href="#" class="menu-link">
+                                    <i class="fas fa-book"></i>
+                                    <span class="english">Banking Regulations</span>
+                                    <span class="amharic">የባንክ ደንቦች</span>
+                                </a>
+                                <a href="#" class="menu-link">
+                                    <i class="fas fa-file-contract"></i>
+                                    <span class="english">Monetary Policy</span>
+                                    <span class="amharic">የገንዘብ ፖሊሲ</span>
+                                </a>
+                                <a href="#" class="menu-link">
+                                    <i class="fas fa-scale-balanced"></i>
+                                    <span class="english">Legal Framework</span>
+                                    <span class="amharic">ህጋዊ አሰጣጥ</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Resources -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="menu-card">
+                        <div class="menu-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="menu-content">
+                            <h3 class="english">Resources &amp; Downloads</h3>
+                            <h3 class="amharic">ሀብቶች እና ማውረዶች</h3>
+                            <p class="english">Download forms, publications, and other banking resources.</p>
+                            <p class="amharic">ፎርሞችን፣ ህትመቶችን እና ሌሎች የባንክ ሀብቶችን ያውርዱ።</p>
+                            <div class="menu-links">
+                                <a href="#" class="menu-link">
+                                    <i class="fas fa-file-download"></i>
+                                    <span class="english">Forms</span>
+                                    <span class="amharic">ፎርሞች</span>
+                                </a>
+                                <a href="#" class="menu-link">
+                                    <i class="fas fa-book-open"></i>
+                                    <span class="english">Publications</span>
+                                    <span class="amharic">ህትመቶች</span>
+                                </a>
+                                <a href="#" class="menu-link">
+                                    <i class="fas fa-file-pdf"></i>
+                                    <span class="english">Guidelines</span>
+                                    <span class="amharic">መመሪያዎች</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- About NBE -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="menu-card">
+                        <div class="menu-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="menu-content">
+                            <h3 class="english">About NBE</h3>
+                            <h3 class="amharic">ስለ ኢብባ</h3>
+                            <p class="english">Learn about the National Bank's history, mission, and organizational structure.</p>
+                            <p class="amharic">ስለ ብሔራዊ ባንኩ ታሪክ፣ ተልእኮ እና የድርጅት መዋቅር ይወቁ።</p>
+                            <div class="menu-links">
+                                <a href="{% url 'core:history' %}" class="menu-link">
+                                    <i class="fas fa-history"></i>
+                                    <span class="english">History</span>
+                                    <span class="amharic">ታሪክ</span>
+                                </a>
+                                <a href="{% url 'core:mission-vision' %}" class="menu-link">
+                                    <i class="fas fa-bullseye"></i>
+                                    <span class="english">Mission &amp; Vision</span>
+                                    <span class="amharic">ተልእኮ እና አቅጣጫ</span>
+                                </a>
+                                <a href="{% url 'core:organization' %}" class="menu-link">
+                                    <i class="fas fa-sitemap"></i>
+                                    <span class="english">Organization</span>
+                                    <span class="amharic">ድርጅት</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact & Support -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="menu-card">
+                        <div class="menu-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <div class="menu-content">
+                            <h3 class="english">Contact &amp; Support</h3>
+                            <h3 class="amharic">መገኛ እና ድጋፍ</h3>
+                            <p class="english">Get in touch with customer support, find branches, and access help resources.</p>
+                            <p class="amharic">ከደንበኞች አገልግሎት ጋር ይገናኙ፣ ቅርንጫፎችን ያግኙ እና የእገዛ ሀብቶችን ያግኙ።</p>
+                            <div class="menu-links">
+                                <a href="#" class="menu-link">
+                                    <i class="fas fa-phone-alt"></i>
+                                    <span class="english">Contact Us</span>
+                                    <span class="amharic">አግኙን</span>
+                                </a>
+                                <a href="#" class="menu-link">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span class="english">Branch Locator</span>
+                                    <span class="amharic">የቅርንጫፍ አድራሻ</span>
+                                </a>
+                                <a href="#" class="menu-link">
+                                    <i class="fas fa-question-circle"></i>
+                                    <span class="english">FAQs</span>
+                                    <span class="amharic">ተደጋግሞ የሚነሱ ጥያቄዎች</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="quick-actions mt-5">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="english">Quick Actions</h4>
+                    <h4 class="amharic">ፈጣን እርምጃዎች</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 col-6 mb-3">
+                            <button class="quick-action-btn">
+                                <i class="fas fa-exchange-alt"></i>
+                                <span class="english">Currency Converter</span>
+                                <span class="amharic">የምንዛሪ መለወጫ</span>
+                            </button>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <button class="quick-action-btn">
+                                <i class="fas fa-calculator"></i>
+                                <span class="english">Loan Calculator</span>
+                                <span class="amharic">የብድር ካልኩሌተር</span>
+                            </button>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <button class="quick-action-btn">
+                                <i class="fas fa-bell"></i>
+                                <span class="english">Rate Alerts</span>
+                                <span class="amharic">የተመን ማንቂያ</span>
+                            </button>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <button class="quick-action-btn">
+                                <i class="fas fa-print"></i>
+                                <span class="english">Print Statement</span>
+                                <span class="amharic">አባሪ አትም</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</html>

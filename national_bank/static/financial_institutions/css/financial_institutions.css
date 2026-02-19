@@ -1,0 +1,6 @@
+/* Financial institutions CSS placeholder */
+.fi-list{display:flex;flex-wrap:wrap;gap:1rem}
+.fi-card{padding:.75rem;border-radius:.5rem}
+/* Financial Institutions CSS (placeholder) */
+.fi-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.75rem}
+.fi-card{padding:.6rem;border-radius:.5rem}

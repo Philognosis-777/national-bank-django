@@ -1,0 +1,36 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Economic Indicators - National Bank{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+	<h1 class="mb-3">Economic Indicators</h1>
+	<p class="lead">Key economic indicators published by the National Bank, including inflation, GDP growth, employment, and balance of payments.</p>
+
+	<div class="row mt-4">
+		<div class="col-md-8">
+			<div class="card mb-3">
+				<div class="card-body">
+					<h5 class="card-title">Latest Indicators</h5>
+					<p class="card-text">Summary charts and numbers will appear here. Integrate with the market indicators API to populate live data.</p>
+				</div>
+			</div>
+
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">Indicator Details</h5>
+					<p class="card-text">Select an indicator to view historical trends and downloadable datasets.</p>
+				</div>
+			</div>
+		</div>
+
+		<aside class="col-md-4">
+			<div class="list-group">
+				<a class="list-group-item list-group-item-action" href="{% url 'market:indicator-list' %}">Market Indicators</a>
+				<a class="list-group-item list-group-item-action" href="{% url 'core:statistics' %}">Statistics</a>
+				<a class="list-group-item list-group-item-action" href="{% url 'core:financial-reports' %}">Financial Reports</a>
+			</div>
+		</aside>
+	</div>
+</div>
+{% endblock %}

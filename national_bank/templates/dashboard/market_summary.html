@@ -1,0 +1,7 @@
+<div class="card mb-3">
+	<div class="card-body">
+		<h5 class="card-title">Market Summary</h5>
+		<p class="card-text">Latest exchange rate: <strong>{{ market.latest_rate|default:'N/A' }}</strong></p>
+		<p class="card-text small text-muted">Updated: {{ market.updated_at|default:'—' }}</p>
+	</div>
+</div>
