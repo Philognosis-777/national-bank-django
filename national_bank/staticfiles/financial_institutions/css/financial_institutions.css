@@ -1,0 +1,46 @@
+/* Base typography tweaks */
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* Card hover animations */
+.institution-card .card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.institution-card .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.10)!important;
+    border-bottom: 3px solid #0d6efd !important;
+}
+
+/* Styled Branch List */
+.branch-item {
+    border-left: 4px solid #0d6efd;
+    transition: background-color 0.2s ease;
+}
+
+.branch-item:hover {
+    background-color: #e2e6ea !important;
+}
+
+/* Filter Buttons */
+#type-filters .btn {
+    border-radius: 20px; /* Pill-shaped buttons */
+    padding: 0.4rem 1.2rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+/* Smooth fade in for filtered elements */
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}

@@ -1,0 +1,5 @@
+/* Accounts app CSS placeholder */
+.account-card{background:#fff;padding:1rem;border-radius:.5rem}
+/* Accounts app static CSS (placeholder) */
+.accounts-auth-card{max-width:480px;margin:1.25rem auto;padding:1rem;border-radius:.6rem;background:#fff}
+.accounts-helpers{display:flex;gap:.5rem}
