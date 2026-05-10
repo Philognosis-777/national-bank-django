@@ -1,52 +1,40 @@
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
-from django.views.generic import CreateView
-from django.contrib.auth import views as auth_views
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 
-from .models import CustomUser
-from .forms import CustomUserCreationForm, CustomAuthenticationForm
+from .models import User
+from django.contrib import messages
 
+def register_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
 
-class RedirectAuthenticatedUserMixin:
-    """Prevent authenticated users from accessing auth pages."""
+        if User.objects.filter(username=username).exists():
+            return HttpResponse("Username already exists. Please choose a different one.")
 
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            # role-based redirect
-            if hasattr(request.user, 'role') and request.user.role == CustomUser.ROLE_ADMIN:
-                return redirect('/home/')
-            return redirect('/')
-        return super().dispatch(request, *args, **kwargs)
+        user = User.objects.create_user(username=username, password=password, role=User.Role.USER)
+        user.save()
+        messages.success(request, "Registration successful. Please log in.")
+        return redirect('accounts:login')
 
+    return render(request, 'accounts/register.html')
 
-class RegisterView(RedirectAuthenticatedUserMixin, CreateView):
-    model = CustomUser
-    form_class = CustomUserCreationForm
-    template_name = 'accounts/register.html'
-    success_url = reverse_lazy('accounts:login')
-
-
-class LoginView(RedirectAuthenticatedUserMixin, auth_views.LoginView):
-    template_name = 'accounts/login.html'
-    authentication_form = CustomAuthenticationForm
-
-    def form_valid(self, form):
-        remember = form.cleaned_data.get('remember_me')
-        # If remember is False, session will expire at browser close
-        if not remember:
-            self.request.session.set_expiry(0)
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('core:home')
         else:
-            # Use default session expiry age
-            self.request.session.set_expiry(None)
-        return super().form_valid(form)
+            messages.error(request, "Invalid username or password.")
+            return redirect('accounts:login')
 
-    def get_success_url(self):
-        user = self.request.user
-        if hasattr(user, 'role') and user.role == CustomUser.ROLE_PUBLIC:
-            return '/home/'
-        return '/home/'
+    return render(request, 'accounts/login.html')
 
-
-class LogoutView(auth_views.LogoutView):
-    next_page = reverse_lazy('core:intro')
+def logout_view(request):
+    logout(request)
+    return redirect('accounts:login')

@@ -19,6 +19,6 @@ env/
 # Environment variables
 .env
 
-# Migrations (optional)
+# Migrations (optional) 
 */migrations/
 !*/migrations/__init__.py

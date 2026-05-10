@@ -35,7 +35,7 @@ class FinancialInstitution(models.Model):
     head_office_address = models.TextField(blank=True)
     contact_email = models.EmailField(blank=True)
     contact_phone = models.CharField(max_length=32, blank=True)
-    website = models.URLField(blank=True)
+
     capital_amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     status = models.CharField(max_length=16, choices=STATUS_CHOICES, default=STATUS_ACTIVE)
     is_supervised = models.BooleanField(default=True)

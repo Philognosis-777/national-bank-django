@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Branch Detail - National Bank{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+	<h1>{{ branch.branch_name }}</h1>
+	<p><strong>Institution:</strong> {{ branch.institution.name }}</p>
+	<p><strong>City:</strong> {{ branch.city }}</p>
+	<p><strong>Region:</strong> {{ branch.region }}</p>
+	<p><strong>Address:</strong> {{ branch.address }}</p>
+	<p><strong>Status:</strong> {% if branch.is_active %}Active{% else %}Inactive{% endif %}</p>
+	<p><strong>Created At:</strong> {{ branch.created_at }}</p>
+	<p><strong>Updated At:</strong> {{ branch.updated_at }}</p>
+	<div class="mt-3">
+		<a href="{% url 'financial_institutions:branch-update' branch.pk %}" class="btn btn-warning">Edit</a>
+		<a href="{% url 'financial_institutions:branch-delete' branch.pk %}" class="btn btn-danger">Delete</a>
+		<a href="{% url 'financial_institutions:institution-page' %}" class="btn btn-secondary">Back</a>
+	</div>
+</div>
+
+{% endblock %}

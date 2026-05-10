@@ -1,23 +1,44 @@
 {% extends 'core/base.html' %}
-
-{% block title %}Statistics - National Bank{% endblock %}
-
 {% block content %}
-<div class="container py-4">
-	<h1>Statistics</h1>
-	<p class="lead">Official statistics and datasets published by the National Bank.</p>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Dashboard</title>
+    <style link="{% static 'core/css/home.css' %}"></style>
+</head>
+<body>
 
-	<div class="row mt-4">
-		<div class="col-md-6">
-			<div class="card">
-				<div class="card-body">Time series tables and chart placeholders go here.</div>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="card">
-				<div class="card-body">Downloadable CSV and Excel links will be available.</div>
-			</div>
-		</div>
-	</div>
-</div>
+<header>
+    <h1>News Dashboard</h1>
+</header>
+
+<div class="container">
+    <div class="news-article">
+        <h2 class="news-title">Breaking News Title 1</h2>
+        <p class="news-summary">This is a brief summary of the first news article. It gives an overview of the main points discussed.</p>
+        <p class="news-date">Published on: October 1, 2023</p>
+    </div>
+
+    <div class="news-article">
+        <h2 class="news-title">Breaking News Title 2</h2>
+        <p class="news-summary">This is a brief summary of the second news article. It provides insights into the topic covered.</p>
+        <p class="news-date">Published on: October 2, 2023</p>
+    </div>
+
+    <div class="news-article">
+        <h2 class="news-title">Breaking News Title 3</h2>
+        <p class="news-summary">This is a brief summary of the third news article. It highlights key events and information.</p>
+        <p class="news-date">Published on: October 3, 2023</p>
+    </div>
+
+    <!-- More articles can be added here -->
+    </div>
+
+    <script href="{% static 'core/js/home.js' %}"></script>
+
+</body>
+</html>
 {% endblock %}

@@ -49,8 +49,8 @@ INSTALLED_APPS += [
     'news',
     'market',
     'financial_institutions',
-    'dashboard',
     'notifications',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
@@ -150,7 +150,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom user model
-AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = 'accounts.User'
 
 # Authentication redirects
 LOGIN_REDIRECT_URL = '/'

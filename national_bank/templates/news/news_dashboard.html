@@ -1,0 +1,456 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}News & Announcements | National Bank of Ethiopia{% endblock %}
+
+{% block content %}
+<style>
+    /* ========== News Dashboard Styles ========== */
+    .dashboard {
+        padding: 2rem 0;
+    }
+
+    /* --- Filter Bar --- */
+    .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        background: var(--nbe-white);
+        border-radius: var(--nbe-radius);
+        padding: 0.4rem;
+        border: 1px solid var(--nbe-gray-200);
+        box-shadow: var(--nbe-shadow);
+        margin-bottom: 2rem;
+    }
+
+    .filter-btn {
+        background: transparent;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 25px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: var(--nbe-gray-800);
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        white-space: nowrap;
+    }
+
+    .filter-btn i {
+        font-size: 0.8rem;
+        color: var(--nbe-gold);
+    }
+
+    .filter-btn:hover {
+        background: rgba(0, 51, 102, 0.05);
+        color: var(--nbe-blue);
+    }
+
+    .filter-btn.active {
+        background: var(--nbe-blue);
+        color: white;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0, 51, 102, 0.3);
+    }
+
+    .filter-btn.active i {
+        color: var(--nbe-gold-light);
+    }
+
+    .amharic {
+        opacity: 0.8;
+        font-size: 0.75rem;
+    }
+    .filter-btn.active .amharic {
+        opacity: 1;
+    }
+
+    /* --- Search Box --- */
+    .search-wrapper {
+        margin-bottom: 2rem;
+    }
+    .search-box {
+        position: relative;
+        max-width: 400px;
+    }
+    .search-box input {
+        width: 100%;
+        padding: 0.7rem 1rem 0.7rem 2.5rem;
+        border: 1px solid var(--nbe-gray-200);
+        border-radius: 25px;
+        font-size: 0.9rem;
+        background: white;
+        transition: 0.3s ease;
+        color: var(--nbe-gray-800);
+        box-shadow: var(--nbe-shadow);
+    }
+    .search-box input:focus {
+        outline: none;
+        border-color: var(--nbe-gold);
+        box-shadow: 0 0 0 3px rgba(200, 169, 81, 0.15);
+    }
+    .search-box .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--nbe-gray-600);
+        pointer-events: none;
+    }
+
+    /* --- News Grid --- */
+    .news-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .news-card {
+        background: var(--nbe-white);
+        border-radius: var(--nbe-radius);
+        border: 1px solid var(--nbe-gray-200);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: var(--nbe-shadow);
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.4s ease forwards;
+    }
+
+    .news-card.hidden {
+        display: none;
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .news-card:hover {
+        box-shadow: var(--nbe-shadow-hover);
+        transform: translateY(-4px);
+        border-color: var(--nbe-gold);
+    }
+
+    /* Card Media (Video) */
+    .card-media {
+        background: linear-gradient(135deg, #001f3f 0%, #003366 100%);
+        aspect-ratio: 16 / 9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .video-thumb {
+        font-size: 3.5rem;
+        color: rgba(255, 255, 255, 0.9);
+        position: relative;
+    }
+
+    .duration {
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0.5rem;
+        background: rgba(0, 0, 0, 0.75);
+        color: white;
+        padding: 0.25rem 0.6rem;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+    /* Card Content */
+    .card-content {
+        padding: 1.2rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .category-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 0.3rem 0.7rem;
+        border-radius: 20px;
+        margin-bottom: 0.75rem;
+    }
+
+    .news-card[data-category="video"] .category-tag {
+        background: #fff3cd;
+        color: #856404;
+    }
+    .news-card[data-category="announcement"] .category-tag {
+        background: #ffeeba;
+        color: #856404;
+    }
+    .news-card[data-category="paper"] .category-tag {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .card-content h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem;
+        color: var(--nbe-blue);
+        line-height: 1.4;
+    }
+
+    .card-content p {
+        font-size: 0.85rem;
+        color: var(--nbe-gray-600);
+        margin-bottom: 1rem;
+        flex: 1;
+    }
+
+    .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding-top: 0.8rem;
+        border-top: 1px solid var(--nbe-gray-200);
+        margin-top: auto;
+    }
+
+    .date {
+        font-size: 0.8rem;
+        color: var(--nbe-gray-600);
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .read-more {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--nbe-blue);
+        text-decoration: none;
+        background: rgba(0, 51, 102, 0.06);
+        padding: 0.35rem 0.8rem;
+        border-radius: 20px;
+        transition: 0.3s ease;
+    }
+
+    .read-more:hover {
+        background: var(--nbe-blue);
+        color: white;
+    }
+
+    .read-more i {
+        font-size: 0.6rem;
+        transition: 0.2s;
+    }
+    .read-more:hover i {
+        transform: translateX(3px);
+    }
+
+    /* No Results */
+    .no-results {
+        text-align: center;
+        grid-column: 1 / -1;
+        padding: 3rem;
+        background: white;
+        border-radius: var(--nbe-radius);
+        border: 2px dashed var(--nbe-gray-200);
+        color: var(--nbe-gray-600);
+        font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .news-grid {
+            grid-template-columns: 1fr;
+        }
+        .filter-btn {
+            padding: 0.5rem 0.9rem;
+            font-size: 0.8rem;
+        }
+    }
+</style>
+
+<div class="dashboard">
+    <!-- Search Box -->
+    <div class="search-wrapper">
+        <div class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="newsSearch" placeholder="Search news...">
+        </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">
+            <i class="fas fa-border-all"></i> All News
+            <span class="amharic">ሁሉም መረጃ</span>
+        </button>
+        <button class="filter-btn" data-filter="video">
+            <i class="fas fa-video"></i> Video
+            <span class="amharic">ቪዲዮ</span>
+        </button>
+        <button class="filter-btn" data-filter="announcement">
+            <i class="fas fa-bullhorn"></i> Announcements
+            <span class="amharic">ማስታወሻዎች</span>
+        </button>
+        <button class="filter-btn" data-filter="paper">
+            <i class="fas fa-newspaper"></i> Paper News
+            <span class="amharic">የፋይና መረጃ</span>
+        </button>
+    </div>
+
+    <!-- News Grid -->
+    <div class="news-grid" id="newsGrid">
+        {% for video in videos %}
+        <div class="news-card" data-category="video" data-title="{{ video.title|lower }}" data-desc="{{ video.description|lower|default:'' }}">
+            <div class="card-media">
+                <div class="video-thumb">
+                    <i class="fas fa-play-circle"></i>
+                    <span class="duration">{{ video.duration|default:"0:00" }}</span>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="card-meta">
+                    <span class="category-tag">
+                        <i class="fas fa-video"></i> Video
+                        <span class="amharic">ቪዲዮ</span>
+                    </span>
+                </div>
+                <h3>{{ video.title }}</h3>
+                <p>{{ video.description|truncatewords:20 }}</p>
+                <div class="card-footer">
+                    <span class="date">
+                        <i class="far fa-calendar-alt"></i>
+                        {{ video.created_at|date:"M d" }}
+                    </span>
+                    <a href="{% url 'news:video-news-detail' video.pk %}" class="read-more">
+                        Watch <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for announcement in announcements %}
+        <div class="news-card" data-category="announcement" data-title="{{ announcement.short_description|lower }}" data-desc="{{ announcement.short_description|lower }}">
+            <div class="card-content">
+                <div class="card-meta">
+                    <span class="category-tag">
+                        <i class="fas fa-bullhorn"></i> Announcement
+                        <span class="amharic">ማስታወሻ</span>
+                    </span>
+                </div>
+                <h3>{{ announcement.short_description }}</h3>
+                <div class="card-footer">
+                    <span class="date">
+                        <i class="far fa-calendar-alt"></i>
+                        {{ announcement.created_at|date:"M d" }}
+                    </span>
+                    <a href="{% url 'news:verbal-announcement-detail' announcement.pk %}" class="read-more">
+                        Read More <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for paper in paper_news %}
+        <div class="news-card" data-category="paper" data-title="{{ paper.content|lower|truncatechars:60 }}" data-desc="{{ paper.content|lower|truncatechars:100 }}">
+            <div class="card-content">
+                <div class="card-meta">
+                    <span class="category-tag">
+                        <i class="fas fa-newspaper"></i> Paper News
+                        <span class="amharic">የፋይና መረጃ</span>
+                    </span>
+                </div>
+                <h3>{{ paper.content|truncatechars:80 }}</h3>
+                <div class="card-footer">
+                    <span class="date">
+                        <i class="far fa-calendar-alt"></i>
+                        {{ paper.created_at|date:"M d" }}
+                    </span>
+                    <a href="{% url 'news:paper-news-detail' paper.pk %}" class="read-more">
+                        Read More <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- No Results Message -->
+    <div id="noResultsMsg" class="no-results" style="display: none;">
+        <i class="fas fa-search" style="font-size: 2.5rem; opacity: 0.5; margin-bottom: 1rem; display: block;"></i>
+        No news found for this category or search term.
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const cards = document.querySelectorAll('.news-card');
+        const noResults = document.getElementById('noResultsMsg');
+        const searchInput = document.getElementById('newsSearch');
+
+        let currentFilter = 'all';
+        let searchQuery = '';
+
+        function applyFilters() {
+            let visibleCount = 0;
+            cards.forEach(card => {
+                const category = card.dataset.category;
+                const title = card.dataset.title || '';
+                const desc = card.dataset.desc || '';
+                const text = title + ' ' + desc;
+
+                const matchesCategory = (currentFilter === 'all' || category === currentFilter);
+                const matchesSearch = (searchQuery === '' || text.includes(searchQuery));
+
+                if (matchesCategory && matchesSearch) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        // Filter buttons
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                applyFilters();
+            });
+        });
+
+        // Search input
+        searchInput.addEventListener('input', function() {
+            searchQuery = this.value.toLowerCase().trim();
+            applyFilters();
+        });
+
+        // Initial filter (all active)
+        applyFilters();
+    });
+</script>
+{% endblock %}

@@ -1,49 +1,741 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}National Bank of Ethiopia{% endblock %}</title>
 
-    {# Vendor CSS (local) #}
-    <link rel="stylesheet" href="{% static 'core/vendors/bootstrap/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'core/vendors/fontawesome/css/all.min.css' %}">
+    <!-- Bootstrap 5 CSS (minimal, only grid & utilities – we override everything else) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Roboto + Noto Serif Ethiopic -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Serif+Ethiopic:wght@400;700&display=swap" rel="stylesheet">
 
-    {# Layout CSS #}
-    <link rel="stylesheet" href="{% static 'core/css/layout/base.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/layout/navbar.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/layout/footer.css' %}">
+    <!-- Custom Base Styles (Professional, Government/Finance Design) -->
+    <style>
+        :root {
+            /* Core Palette: Blue, White, Gold, Gray */
+            --nbe-blue: #003366;
+            --nbe-blue-dark: #001f3f;
+            --nbe-blue-light: #1a5276;
+            --nbe-gold: #c8a951;
+            --nbe-gold-light: #e0c87c;
+            --nbe-white: #ffffff;
+            --nbe-gray-100: #f8f9fa;
+            --nbe-gray-200: #e9ecef;
+            --nbe-gray-600: #6c757d;
+            --nbe-gray-800: #343a40;
+            --nbe-shadow: 0 4px 20px rgba(0, 51, 102, 0.08);
+            --nbe-shadow-hover: 0 8px 30px rgba(0, 51, 102, 0.15);
+            --nbe-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --nbe-radius: 12px;
+            --nbe-radius-sm: 8px;
+            --header-height: 80px;
+        }
 
-    {# Page CSS: `page_name` provided by view/context; default to 'home' #}
-    {% with page=page_name|default:"home" %}
-      <link rel="stylesheet" href="{% static 'core/css/pages/'|add:page|add:'.css' %}">
-    {% endwith %}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Roboto', 'Noto Serif Ethiopic', sans-serif;
+            background-color: #f5f7fa;
+            color: var(--nbe-gray-800);
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-top: var(--header-height);
+        }
+
+        /* ---------- Language Toggle (default: English visible, Amharic hidden) ---------- */
+        .amharic {
+            display: none;
+        }
+        body.lang-am .english {
+            display: none;
+        }
+        body.lang-am .amharic {
+            display: inline;
+        }
+
+        /* ---------- Navbar ---------- */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: var(--nbe-white);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            transition: var(--nbe-transition);
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar {
+            padding: 0;
+            width: 100%;
+            background: transparent !important;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--nbe-blue) !important;
+            font-weight: 700;
+        }
+
+        .navbar-brand img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .brand-text h1 {
+            font-size: 1.1rem;
+            margin: 0;
+            color: var(--nbe-blue);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .brand-text .tagline {
+            font-size: 0.7rem;
+            margin: 0;
+            color: var(--nbe-gray-600);
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-nav {
+            gap: 0.25rem;
+        }
+
+        .nav-link {
+            color: var(--nbe-blue) !important;
+            font-weight: 500;
+            padding: 0.6rem 0.8rem !important;
+            border-radius: var(--nbe-radius-sm);
+            transition: var(--nbe-transition);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background-color: rgba(0, 51, 102, 0.06);
+            color: var(--nbe-blue) !important;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 2px;
+            background: var(--nbe-gold);
+            border-radius: 2px;
+        }
+
+        .nav-link i {
+            font-size: 0.85rem;
+            color: var(--nbe-gold);
+        }
+
+        /* Language Toggle Button */
+        .lang-toggle-btn {
+            background: transparent;
+            border: 1.5px solid var(--nbe-blue);
+            color: var(--nbe-blue);
+            border-radius: 25px;
+            padding: 0.4rem 1.2rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--nbe-transition);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .lang-toggle-btn:hover {
+            background: var(--nbe-blue);
+            color: white;
+        }
+        .lang-toggle-btn i {
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Hamburger */
+        .navbar-toggler {
+            border: none;
+            padding: 0.5rem;
+            color: var(--nbe-blue);
+            background: rgba(0,51,102,0.05);
+            border-radius: 6px;
+        }
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+        .navbar-toggler-icon {
+            background-image: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--nbe-blue);
+        }
+        .navbar-toggler-icon::before {
+            content: "\f0c9";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+        }
+
+        /* Dropdown transition override */
+        @media (min-width: 992px) {
+            .navbar-collapse {
+                transition: none;
+            }
+        }
+
+        /* ---------- Main Content ---------- */
+        main {
+            min-height: 70vh;
+        }
+
+        /* ---------- Footer ---------- */
+        .main-footer {
+            background: var(--nbe-blue);
+            color: rgba(255,255,255,0.9);
+            padding: 3rem 0 1rem;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-box {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .footer-box.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .footer-logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .footer-logo i {
+            font-size: 2rem;
+            color: var(--nbe-gold);
+        }
+        .footer-logo img {
+            height: 40px;
+            width: auto;
+        }
+        .bank-name {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: white;
+        }
+        .bank-tagline {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            color: var(--nbe-gold-light);
+        }
+
+        .footer-box h4 {
+            color: var(--nbe-gold);
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .footer-box ul {
+            list-style: none;
+            padding: 0;
+        }
+        .footer-box ul li {
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .footer-box ul li i {
+            width: 18px;
+            color: var(--nbe-gold-light);
+        }
+        .footer-box a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            transition: var(--nbe-transition);
+        }
+        .footer-box a:hover {
+            color: var(--nbe-gold-light);
+            padding-left: 4px;
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            transition: var(--nbe-transition);
+        }
+        .social-link i {
+            width: 24px;
+            text-align: center;
+        }
+        .social-link:hover {
+            color: var(--nbe-gold-light);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.15);
+            padding-top: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .footer-bottom.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            margin-left: 1.5rem;
+            text-decoration: none;
+        }
+        .footer-links a:hover {
+            color: var(--nbe-gold-light);
+        }
+
+        /* ---------- Coin Navigation (Floating) ---------- */
+        .coin-nav-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1050;
+        }
+
+        .coin-nav {
+            background: var(--nbe-white);
+            border-radius: 50px;
+            box-shadow: 0 6px 25px rgba(0,51,102,0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: var(--nbe-transition);
+            overflow: hidden;
+            width: 56px;
+            height: 56px;
+        }
+
+        .coin-nav.expanded {
+            width: 180px;
+            height: auto;
+            border-radius: 30px;
+        }
+
+        .coin-icon {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--nbe-gold);
+            cursor: pointer;
+            background: var(--nbe-blue);
+            border-radius: 50%;
+            transition: var(--nbe-transition);
+            flex-shrink: 0;
+        }
+        .coin-nav.expanded .coin-icon {
+            border-radius: 30px 30px 0 0;
+        }
+
+        .nav-expand {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+            background: var(--nbe-white);
+            padding: 0 10px;
+        }
+        .coin-nav.expanded .nav-expand {
+            max-height: 300px;
+            padding: 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.5rem 0.8rem;
+            color: var(--nbe-blue);
+            text-decoration: none;
+            border-radius: 6px;
+            white-space: nowrap;
+            transition: var(--nbe-transition);
+            font-size: 0.85rem;
+        }
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+            color: var(--nbe-gold);
+        }
+        .nav-item:hover {
+            background: rgba(0,51,102,0.08);
+            color: var(--nbe-blue-dark);
+        }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 991px) {
+            :root {
+                --header-height: 70px;
+            }
+            .navbar-brand img {
+                height: 40px;
+            }
+            .brand-text h1 {
+                font-size: 0.95rem;
+            }
+            .navbar-nav {
+                background: var(--nbe-white);
+                padding: 1rem;
+                border-radius: 0 0 12px 12px;
+                box-shadow: var(--nbe-shadow);
+                margin-top: 0.5rem;
+            }
+            .coin-nav-container {
+                bottom: 1.5rem;
+                right: 1.5rem;
+            }
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
 </head>
+<body class="home-page">
 
-<body class="page-{{ page_name|default:'home' }}">
+    <!-- ========== Main Header / Navbar ========== -->
+    <header class="main-header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <!-- Brand -->
+                <a class="navbar-brand" href="{% url 'core:home' %}">
+                    <img src="{% static 'images/logo.png.jpg' %}" alt="NBE Logo">
+                    <div class="brand-text">
+                        <h1 class="english">National Bank of Ethiopia</h1>
+                        <h1 class="amharic">የኢትዮጵያ ብሔራዊ ባንክ</h1>
+                        <p class="tagline english">Financial Stability & Economic Growth</p>
+                        <p class="tagline amharic">የገንዘብ መረጋጋት እና ኢኮኖሚያዊ እድገት</p>
+                    </div>
+                </a>
 
-    {% include 'core/includes/navbar.html' %}
+                <!-- Mobile Toggler -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-    <main id="mainContent">
-      {% block content %}{% endblock %}
+                <!-- Nav Links -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'core:home' %}">
+                                <i class="fas fa-home"></i>
+                                <span class="english">Home</span>
+                                <span class="amharic">መነሻ</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'news:news' %}">
+                                <i class="fas fa-newspaper"></i>
+                                <span class="english">News</span>
+                                <span class="amharic">ዜና</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'market:market' %}">
+                                <i class="fas fa-chart-line"></i>
+                                <span class="english">Market</span>
+                                <span class="amharic">ገበያ</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'financial_institutions:institution-page' %}">
+                                <i class="fas fa-building-columns"></i>
+                                <span class="english">Institutions</span>
+                                <span class="amharic">ተቋማት</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'core:hamburger' %}">
+                                <i class="fas fa-bars"></i>
+                                <span class="english">Menu</span>
+                                <span class="amharic">ምናሌ</span>
+                            </a>
+                        </li>
+                        {% if request.user.role == 'super_admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'dashboard:admin-dashboard' %}">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span class="english">Dashboard</span>
+                                <span class="amharic">ዳሽቦርድ</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        <!-- Language Toggle (inside nav) -->
+                        <li class="nav-item ms-lg-2">
+                            <button id="langToggle" class="lang-toggle-btn">
+                                <span class="lang-text">አማርኛ</span>
+                                <i class="fas fa-globe-africa"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Block -->
+    <main>
+        {% block content %}{% endblock %}
     </main>
 
-    {% include 'core/includes/footer.html' %}
+    <!-- ========== Footer ========== -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-box footer-brand fade-in">
+                    <div class="footer-logo-container">
+                        <div class="footer-logo">
+                            <i class="fas fa-university"></i>
+                            <img src="{% static 'images/logo.png.jpg' %}" alt="NBE Logo" class="logo-img">
+                        </div>
+                        <div class="logo-text-content">
+                            <h3 class="bank-name" data-en="National Bank of Ethiopia" data-am="የኢትዮጵያ ብሔራዊ ባንክ">National Bank of Ethiopia</h3>
+                            <p class="bank-tagline" data-en="Ensuring Financial Stability for a Prosperous Ethiopia" data-am="ለተስፋፊ ኢትዮጵያ የገንዘብ መረጋጋትን ማረጋገጥ">Ensuring Financial Stability for a Prosperous Ethiopia</p>
+                        </div>
+                    </div>
+                </div>
 
-    {# Vendor JS (local) #}
-    <script src="{% static 'core/vendors/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'core/vendors/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+                <div class="footer-box fade-in">
+                    <h4 data-en="Contact Us" data-am="አግኙን">Contact Us</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i><span data-en="Sudan Street, Addis Ababa, Ethiopia" data-am="ሱዳን እስትሪት, አዲስ አበባ, ኢትዮጵያ">Sudan Street, Addis Ababa, Ethiopia</span></li>
+                        <li><i class="fas fa-phone"></i><span data-en="Phone: +251 11 551 6230" data-am="ስልክ: +251 11 551 6230">Phone: +251 11 551 6230</span></li>
+                        <li><i class="fas fa-envelope"></i><span data-en="Email: info@nbe.gov.et" data-am="ኢሜይል: info@nbe.gov.et">Email: info@nbe.gov.et</span></li>
+                        <li><i class="fas fa-fax"></i><span data-en="Fax: +251 11 551 4999" data-am="ፋክስ: +251 11 551 4999">Fax: +251 11 551 4999</span></li>
+                    </ul>
+                </div>
 
-    {# Layout JS #}
-    <script src="{% static 'core/js/layout/base.js' %}"></script>
-    <script src="{% static 'core/js/layout/navbar.js' %}"></script>
-    <script src="{% static 'core/js/layout/footer.js' %}"></script>
+                <div class="footer-box fade-in">
+                    <h4 data-en="Quick Links" data-am="ፈጣን አገናኞች">Quick Links</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope-open-text"></i><a href="#" data-en="Webmail" data-am="ዌብሜይል">Webmail</a></li>
+                        <li><i class="fas fa-coins"></i><a href="#" data-en="Financial Services" data-am="የፋይናንስ አገልግሎቶች">Financial Services</a></li>
+                        <li><i class="fas fa-chart-line"></i><a href="#" data-en="Economic Data" data-am="የኢኮኖሚ ዳታ">Economic Data</a></li>
+                        <li><i class="fas fa-file-contract"></i><a href="{% url 'core:regulations' %}" data-en="Regulations" data-am="ደንቦች">Regulations</a></li>
+                        <li><i class="fas fa-question-circle"></i><a href="#" data-en="Support" data-am="ድጋፍ">Support</a></li>
+                    </ul>
+                </div>
 
-    {# Page JS #}
-    {% with page=page_name|default:"home" %}
-      <script src="{% static 'core/js/pages/'|add:page|add:'.js' %}"></script>
-    {% endwith %}
+                <div class="footer-box fade-in">
+                    <h4 data-en="Follow Us" data-am="ይከተሉን">Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i><span data-en="Facebook" data-am="ፌስቡክ">Facebook</span></a>
+                        <a href="#" class="social-link"><i class="fab fa-telegram"></i><span data-en="Telegram" data-am="ቴሌግራም">Telegram</span></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i><span data-en="YouTube" data-am="ዩቲዩብ">YouTube</span></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i><span data-en="Twitter" data-am="ትዊተር">Twitter</span></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i><span data-en="LinkedIn" data-am="ሊንክዲን">LinkedIn</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom fade-in">
+                <div class="copyright">
+                    <span data-en="© 2025 National Bank of Ethiopia. All rights reserved." data-am="© 2023 የኢትዮጵያ ብሔራዊ ባንክ. ሁሉም መብቶች የተጠበቁ ናቸው።">© 2025 National Bank of Ethiopia. All rights reserved.</span>
+                </div>
+                <div class="footer-links">
+                    <a href="#" data-en="Privacy Policy" data-am="የግላዊነት ፖሊሲ">Privacy Policy</a>
+                    <a href="#" data-en="Terms of Use" data-am="የአጠቃቀም ውሎች">Terms of Use</a>
+                    <a href="#" data-en="Accessibility" data-am="ተደራሽነት">Accessibility</a>
+                    <a href="#" data-en="Sitemap" data-am="የጣቢያ ካርታ">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Coin Navigation (Floating) -->
+    <div class="coin-nav-container">
+        <div class="coin-nav" id="coinNav">
+            <div class="coin-icon" id="coinIcon">
+                <i class="fas fa-coins"></i>
+            </div>
+            <div class="nav-expand">
+                <a href="{% url 'core:home' %}" class="nav-item" data-page="home">
+                    <i class="fas fa-home"></i>
+                    <span class="english">Home</span>
+                    <span class="amharic">መነሻ</span>
+                </a>
+                <a href="{% url 'news:news' %}" class="nav-item" data-page="news">
+                    <i class="fas fa-newspaper"></i>
+                    <span class="english">News</span>
+                    <span class="amharic">ዜና</span>
+                </a>
+                <a href="{% url 'market:market' %}" class="nav-item" data-page="market">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="english">Market</span>
+                    <span class="amharic">ገበያ</span>
+                </a>
+                <a href="{% url 'core:hamburger' %}" class="nav-item" data-page="hamburger">
+                    <i class="fas fa-bars"></i>
+                    <span class="english">Menu</span>
+                    <span class="amharic">ምናሌ</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript (all features in one place) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // ---------- LANGUAGE TOGGLE ----------
+            const langBtn = document.getElementById('langToggle');
+            const body = document.body;
+            const langTextSpan = langBtn.querySelector('.lang-text');
+
+            // Check local storage for saved language
+            const savedLang = localStorage.getItem('nbe_lang');
+            if (savedLang === 'am') {
+                body.classList.add('lang-am');
+                langTextSpan.textContent = 'English';
+            } else {
+                body.classList.remove('lang-am');
+                langTextSpan.textContent = 'አማርኛ';
+            }
+
+            langBtn.addEventListener('click', function () {
+                body.classList.toggle('lang-am');
+                if (body.classList.contains('lang-am')) {
+                    langTextSpan.textContent = 'English';
+                    localStorage.setItem('nbe_lang', 'am');
+                } else {
+                    langTextSpan.textContent = 'አማርኛ';
+                    localStorage.setItem('nbe_lang', 'en');
+                }
+            });
+
+            // ---------- ACTIVE NAV LINK (based on current URL) ----------
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                }
+            });
+
+            // ---------- SMOOTH SCROLLING for anchor links ----------
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href === '#') return;
+                    const target = document.querySelector(href);
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // ---------- COIN NAVIGATION EXPAND/COLLAPSE ----------
+            const coinNav = document.getElementById('coinNav');
+            const coinIcon = document.getElementById('coinIcon');
+            let isExpanded = false;
+
+            coinIcon.addEventListener('click', function (e) {
+                e.stopPropagation();
+                isExpanded = !isExpanded;
+                if (isExpanded) {
+                    coinNav.classList.add('expanded');
+                } else {
+                    coinNav.classList.remove('expanded');
+                }
+            });
+
+            // Close coin nav when clicking outside
+            document.addEventListener('click', function (event) {
+                if (!coinNav.contains(event.target) && isExpanded) {
+                    isExpanded = false;
+                    coinNav.classList.remove('expanded');
+                }
+            });
+
+            // ---------- FOOTER FADE-IN ON SCROLL ----------
+            const footerElements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            footerElements.forEach(el => observer.observe(el));
+
+            // ---------- STICKY NAVBAR SCROLL EFFECT (shadow enhancement) ----------
+            window.addEventListener('scroll', function () {
+                const header = document.querySelector('.main-header');
+                if (window.scrollY > 10) {
+                    header.style.boxShadow = '0 4px 20px rgba(0,51,102,0.1)';
+                } else {
+                    header.style.boxShadow = '0 2px 15px rgba(0,0,0,0.05)';
+                }
+            });
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

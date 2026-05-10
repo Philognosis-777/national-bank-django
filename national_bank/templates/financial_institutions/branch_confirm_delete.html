@@ -1,0 +1,14 @@
+<html>
+
+
+
+<div class="container py-4">
+	<h1>Confirm Delete Branch</h1>
+	<p>Are you sure you want to delete the branch "{{ branch.branch_name }}" ({{ branch.institution.name }})?</p>
+	<form method="post">
+		{% csrf_token %}
+		<button type="submit" class="btn btn-danger">Yes, Delete</button>
+		<a href="{% url 'financial_institutions:branch-detail' branch.pk %}" class="btn btn-secondary">Cancel</a>
+	</form>
+</div>
+</html>

@@ -1,16 +1,40 @@
 {% extends 'core/base.html' %}
+{% load static %}
 {% block content %}
-<main class="container my-5">
-	<a href="{% url 'news:videonews-list' %}" class="btn btn-link mb-3">← Back to videos</a>
-	<div class="card">
-		<div class="card-body">
-			<h2 class="card-title">{{ video.title }}</h2>
-			<p class="text-muted">{{ video.published_at|date:'F j, Y' }}</p>
-			<div class="ratio ratio-16x9 mb-3">
-				<iframe src="{{ video.embed_url }}" title="{{ video.title }}" allowfullscreen></iframe>
-			</div>
-			<p>{{ video.description }}</p>
-		</div>
-	</div>
-</main>
+
+<body>
+    <h1>{{ video_news.title }}</h1>
+
+    <div class="meta">
+        By {{ video_news.author.get_full_name|default:video_news.author.username }}
+        | Published: {% if video_news.is_published %}Yes{% else %}No{% endif %}
+        <br>
+        Created: {{ video_news.created_at|date:"F j, Y" }}
+        | Updated: {{ video_news.updated_at|date:"F j, Y" }}
+    </div>
+
+    <div class="description">
+        <p>{{ video_news.description|linebreaksbr }}</p>
+    </div>
+
+    {% if video_news.video_file %}
+        <video controls>
+            <source src="{{ video_news.video_file.url }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    {% endif %}
+
+    {% if video_news.video_url %}
+        <a href="{{ video_news.video_url }}" target="_blank" rel="noopener noreferrer" class="external-link">
+            ▶ Watch external video
+        </a>
+    {% endif %}
+
+    {% if video_news.duration %}
+        <p><strong>Duration:</strong> {{ video_news.duration }} seconds</p>
+    {% endif %}
+
+    <small><a href="javascript:history.back()">← Back</a></small>
+</body>
+
 {% endblock %}

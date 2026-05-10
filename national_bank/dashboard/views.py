@@ -1,50 +1,38 @@
-from django.http import JsonResponse
-from django.views import View
+from news.models import VideoNews, PaperNews, VerbalAnnouncement
+from django.views.generic import TemplateView
+from financial_institutions.models import InstitutionType, FinancialInstitution, Branch
+from market.models import Currency
 
-from .mixins import AdminRequiredMixin
-from . import services
-
-
-class AdminDashboardView(AdminRequiredMixin, View):
-    """Aggregate data for admin dashboard.
-
-    Returns JSON with market, institution, news, and user summaries.
-    """
-
-    def get(self, request):
-        market = services.get_latest_exchange_rates(limit=20)
-        institutions = services.get_institution_summary()
-        news = services.get_news_summary()
-        users = services.get_user_summary()
-        widgets = services.get_dashboard_config()
-
-        payload = {
-            'market': market,
-            'institutions': institutions,
-            'news': news,
-            'users': users,
-            'widgets': widgets,
-            'generated_at': __import__('django.utils.timezone').utils.timezone.now().isoformat(),
-        }
-        return JsonResponse(payload)
+class DashboardView(TemplateView):
+    template_name = "dashboard/admin_dashboard.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["videos"] = VideoNews.objects.all().order_by("-created_at")
+        context["paper_news"] = PaperNews.objects.all().order_by("-created_at")
+        context["announcements"] = VerbalAnnouncement.objects.all().order_by("-created_at")
+        context["institution_types"] = InstitutionType.objects.all()
+        context["institutions"] = FinancialInstitution.objects.all()
+        context["branches"] = Branch.objects.all()
+        context["currencies"] = Currency.objects.all()
+        return context
 
 
-class PublicDashboardView(View):
-    """Limited public dashboard with non-sensitive summaries."""
 
-    def get(self, request):
-        market = services.get_latest_exchange_rates(limit=10)
-        institutions = services.get_institution_summary()
-        # only include non-sensitive counts
-        public = {
-            'institutions_active': institutions.get('active'),
-            'institutions_total': institutions.get('total'),
-        }
-        news = services.get_news_summary()
-        payload = {
-            'market': market,
-            'institutions': public,
-            'news': news,
-            'generated_at': __import__('django.utils.timezone').utils.timezone.now().isoformat(),
-        }
-        return JsonResponse(payload)
+class InstitutionDashboardView(TemplateView):
+    template_name = "dashboard/institution_dashboard.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["institution_types"] = InstitutionType.objects.all()
+        context["institutions"] = FinancialInstitution.objects.all()
+        context["branches"] = Branch.objects.all()
+        return context
+
+class NewsDashboardView(TemplateView):
+    template_name = "dashboard/news_dashboard.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["videos"] = VideoNews.objects.all().order_by("-created_at")
+        context["paper_news"] = PaperNews.objects.all().order_by("-created_at")
+        context["announcements"] = VerbalAnnouncement.objects.all().order_by("-created_at")
+        return context
+

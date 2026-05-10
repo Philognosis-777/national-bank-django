@@ -1,9 +1,350 @@
 {% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Home - National Bank of Ethiopia{% endblock %}
 
 {% block content %}
+<style>
+    /* ========== Home‑Specific Styles ========== */
+    .welcome-section h2 {
+        font-weight: 700;
+        color: var(--nbe-blue);
+        margin-bottom: 1.5rem;
+        border-left: 5px solid var(--nbe-gold);
+        padding-left: 1rem;
+        font-size: 2rem;
+    }
 
+    .welcome-card {
+        border: none;
+        border-radius: var(--nbe-radius);
+        box-shadow: var(--nbe-shadow);
+        transition: var(--nbe-transition);
+        background: var(--nbe-white);
+    }
+    .welcome-card:hover {
+        box-shadow: var(--nbe-shadow-hover);
+        transform: translateY(-3px);
+    }
+    .welcome-card .card-body {
+        padding: 2rem;
+    }
+    .welcome-card p {
+        font-size: 1rem;
+        color: var(--nbe-gray-600);
+        line-height: 1.8;
+    }
+
+    /* Stats Row */
+    .stats-row {
+        margin-top: 1.5rem;
+    }
+    .stat-item {
+        text-align: center;
+        padding: 1rem 0.5rem;
+        border-radius: var(--nbe-radius-sm);
+        background: rgba(0,51,102,0.03);
+        transition: var(--nbe-transition);
+    }
+    .stat-item:hover {
+        background: rgba(0,51,102,0.07);
+        transform: scale(1.03);
+    }
+    .stat-item h3 {
+        font-weight: 700;
+        color: var(--nbe-blue);
+        font-size: 2rem;
+        margin-bottom: 0.25rem;
+    }
+    .stat-item p {
+        font-size: 0.8rem;
+        color: var(--nbe-gray-600);
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Services Section */
+    .services-section h3 {
+        font-weight: 700;
+        color: var(--nbe-blue);
+        margin-bottom: 2rem;
+        border-bottom: 2px solid var(--nbe-gold);
+        display: inline-block;
+        padding-bottom: 0.4rem;
+    }
+    .service-card {
+        border: none;
+        border-radius: var(--nbe-radius);
+        box-shadow: var(--nbe-shadow);
+        transition: var(--nbe-transition);
+        height: 100%;
+        background: var(--nbe-white);
+    }
+    .service-card:hover {
+        box-shadow: var(--nbe-shadow-hover);
+        transform: translateY(-5px);
+        border-top: 4px solid var(--nbe-gold);
+    }
+    .service-card .card-body {
+        padding: 2rem 1.5rem;
+        text-align: center;
+    }
+    .service-card i {
+        font-size: 2.5rem;
+        color: var(--nbe-gold);
+        margin-bottom: 1rem;
+    }
+    .service-card h4 {
+        font-weight: 600;
+        color: var(--nbe-blue);
+        margin-bottom: 0.75rem;
+    }
+    .service-card p {
+        color: var(--nbe-gray-600);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    /* Sidebar Cards */
+    .sidebar .card {
+        border: none;
+        border-radius: var(--nbe-radius);
+        box-shadow: var(--nbe-shadow);
+        margin-bottom: 1.5rem;
+        background: var(--nbe-white);
+    }
+    .card-header {
+        background: linear-gradient(135deg, var(--nbe-blue) 0%, var(--nbe-blue-light) 100%);
+        color: white;
+        border-radius: var(--nbe-radius) var(--nbe-radius) 0 0 !important;
+        padding: 0.8rem 1.2rem;
+    }
+    .card-header h4 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+    .announcement-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .announcement-list li {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--nbe-gray-200);
+        font-size: 0.9rem;
+        color: var(--nbe-gray-800);
+        transition: var(--nbe-transition);
+    }
+    .announcement-list li:last-child {
+        border-bottom: none;
+    }
+    .announcement-list li:hover {
+        color: var(--nbe-blue);
+        padding-left: 5px;
+    }
+    .announcement-list small {
+        display: block;
+        color: var(--nbe-gold);
+        font-weight: 500;
+        margin-top: 0.2rem;
+        font-size: 0.75rem;
+    }
+
+    .quick-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+    .quick-link {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.6rem 0.8rem;
+        border-radius: var(--nbe-radius-sm);
+        color: var(--nbe-blue);
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--nbe-transition);
+        background: rgba(0,51,102,0.02);
+    }
+    .quick-link i {
+        width: 20px;
+        color: var(--nbe-gold);
+        font-size: 1rem;
+        text-align: center;
+    }
+    .quick-link:hover {
+        background: rgba(0,51,102,0.08);
+        color: var(--nbe-blue-dark);
+        padding-left: 1rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .welcome-section h2 {
+            font-size: 1.5rem;
+        }
+        .stat-item h3 {
+            font-size: 1.6rem;
+        }
+        .service-card .card-body {
+            padding: 1.5rem 1rem;
+        }
+    }
+</style>
+
+<!-- Main Content -->
 <main class="container mt-5">
-    <!-- EVERYTHING that was inside <main> ... </main> goes here EXACTLY as you wrote it -->
-</main>
+    <div class="row">
+        <div class="col-lg-8">
+            <section class="welcome-section">
+                <h2 class="english">Welcome to the National Bank of Ethiopia</h2>
+                <h2 class="amharic">ወደ የኢትዮጵያ ብሔራዊ ባንክ እንኳን ደህና መጡ</h2>
 
+                <div class="card welcome-card">
+                    <div class="card-body">
+                        <p class="english">The National Bank of Ethiopia (NBE) is the central bank of Ethiopia. Its mission is to maintain price and exchange rate stability, foster a sound financial system, and undertake other related functions.</p>
+                        <p class="amharic">የኢትዮጵያ ብሔራዊ ባንክ (ኢብባ) የኢትዮጵያ ማዕከላዊ ባንክ ነው። ተልእኮው የዋጋ እና የምንዛሪ ተለዋዋጭነት መረጋጋትን ማስጠበቅ፣ ጤናማ የገንዘብ ስርዓትን ማጎልበት እና ሌሎች ተዛማጅ ተግባራትን ማከናወን ነው።</p>
+
+                        <div class="row stats-row mt-4">
+                            <div class="col-md-3 col-6">
+                                <div class="stat-item">
+                                    <h3>8.7%</h3>
+                                    <p class="english">Inflation Rate</p>
+                                    <p class="amharic">የዋጋ ግሽበት ተመን</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="stat-item">
+                                    <h3>54.8</h3>
+                                    <p class="english">Exchange Rate (USD)</p>
+                                    <p class="amharic">የምንዛሪ ተመን (የአሜሪካ ዶላር)</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="stat-item">
+                                    <h3>6.6%</h3>
+                                    <p class="english">Economic Growth</p>
+                                    <p class="amharic">ኢኮኖሚያዊ እድገት</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <div class="stat-item">
+                                    <h3>12.5%</h3>
+                                    <p class="english">Interest Rate</p>
+                                    <p class="amharic">የወለድ ተመን</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="services-section mt-5">
+                <h3 class="english">Our Services</h3>
+                <h3 class="amharic">የኛ አገልግሎቶች</h3>
+
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card service-card">
+                            <div class="card-body">
+                                <i class="fas fa-coins"></i>
+                                <h4 class="english">Monetary Policy</h4>
+                                <h4 class="amharic">ገንዘብ ፖሊሲ</h4>
+                                <p class="english">Formulating and implementing monetary policy to maintain price stability.</p>
+                                <p class="amharic">የዋጋ መረጋጋትን ለመጠበቅ የገንዘብ ፖሊሲ ማውጣት እና ማፈጸም።</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <div class="card service-card">
+                            <div class="card-body">
+                                <i class="fas fa-university"></i>
+                                <h4 class="english">Banking Supervision</h4>
+                                <h4 class="amharic">የባንክ ክትትል</h4>
+                                <p class="english">Supervising and regulating financial institutions to ensure stability.</p>
+                                <p class="amharic">መረጋጋትን ለማረጋገጥ የገንዘብ ተቋማትን መቆጣጠር እና መቀጠር።</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <div class="card service-card">
+                            <div class="card-body">
+                                <i class="fas fa-chart-pie"></i>
+                                <h4 class="english">Economic Research</h4>
+                                <h4 class="amharic">ኢኮኖሚያዊ ምርምር</h4>
+                                <p class="english">Conducting economic research and analysis to inform policy decisions.</p>
+                                <p class="amharic">የፖሊሲ ውሳኔዎችን ለመረዳት ኢኮኖሚያዊ ምርምር እና ትንታኔ ማካሄድ።</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="sidebar">
+                <!-- Announcements -->
+                <div class="card announcement-card">
+                    <div class="card-header">
+                        <h4 class="english">Latest Announcements</h4>
+                        <h4 class="amharic">የቅርብ ጊዜ ማስታወቂያዎች</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="announcement-list">
+                            {% for announcement in announcements %}
+                            <li>
+                                <span class="english">{{ announcement.short_description }}</span>
+                                <span class="amharic">{{ announcement.title_amharic }}</span>
+                                <small>{{ announcement.announcement_date|date:"F j, Y" }}</small>
+                            </li>
+                            {% empty %}
+                            <li>
+                                <span class="english">No announcements available.</span>
+                                <span class="amharic">ምንም ማስታወቂያ የለም</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="card quick-links-card mt-4">
+                    <div class="card-header">
+                        <h4 class="english">Quick Links</h4>
+                        <h4 class="amharic">ፈጣን አገናኞች</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="quick-links">
+                            <a href="#" class="quick-link">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                <span class="english">Financial Reports</span>
+                                <span class="amharic">የገንዘብ ሪፖርቶች</span>
+                            </a>
+                            <a href="#" class="quick-link">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span class="english">Events Calendar</span>
+                                <span class="amharic">የክንውኖች መዝገበ-ቀን</span>
+                            </a>
+                            <a href="#" class="quick-link">
+                                <i class="fas fa-download"></i>
+                                <span class="english">Download Forms</span>
+                                <span class="amharic">ፎርሞችን ማውረድ</span>
+                            </a>
+                            <a href="#" class="quick-link">
+                                <i class="fas fa-question-circle"></i>
+                                <span class="english">FAQs</span>
+                                <span class="amharic">ተደጋግሞ የሚነሱ ጥያቄዎች</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 {% endblock %}

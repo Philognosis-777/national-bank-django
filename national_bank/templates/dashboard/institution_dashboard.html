@@ -1,49 +1,904 @@
-{% extends 'core/base.html' %}
-{% block content %}
-<main class="container my-5">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3">Institutions Dashboard</h1>
-    <div>
-      <a href="{% url 'financial_institutions:institution-list' %}" class="btn btn-sm btn-outline-primary">All Institutions</a>
-      <a href="{% url 'financial_institutions:branch-list' %}" class="btn btn-sm btn-outline-secondary">Branches</a>
-    </div>
-  </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Institutions Management | Admin Portal</title>
 
-  <section class="mb-4">
-    <h4>Top Institutions</h4>
-    <div class="row">
-      {% for inst in institutions %}
-      <div class="col-md-4 mb-3">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">{{ inst.name }}</h5>
-            <p class="mb-1 text-muted">Type: {{ inst.type.name }}</p>
-            <p class="mb-2">Branches: {{ inst.branches.count }}</p>
-            <a href="{% url 'financial_institutions:institution-detail' inst.slug %}" class="btn btn-sm btn-outline-primary">View</a>
-          </div>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --primary-dark: #3730a3;
+            --accent-types: #0ea5e9;
+            --accent-institutions: #8b5cf6;
+            --accent-branches: #f59e0b;
+            --bg-body: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 4px 10px -6px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 40px -8px rgba(0, 0, 0, 0.1);
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans Ethiopic', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ═══════════ Navbar ═══════════ */
+        .navbar {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .navbar-brand {
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            color: #f8fafc !important;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .navbar-brand i {
+            color: var(--primary-light);
+            font-size: 1.4rem;
+            filter: drop-shadow(0 0 6px rgba(129, 140, 248, 0.5));
+        }
+
+        .navbar-brand:hover i {
+            color: #a5b4fc;
+        }
+
+        .navbar .nav-link {
+            color: #cbd5e1 !important;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            padding: 0.5rem 1rem !important;
+            transition: var(--transition);
+            position: relative;
+            letter-spacing: -0.01em;
+        }
+
+        .navbar .nav-link:hover,
+        .navbar .nav-link.active {
+            color: #f1f5f9 !important;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .navbar .nav-link i {
+            font-size: 0.85rem;
+            margin-right: 0.35rem;
+            opacity: 0.8;
+        }
+
+        .navbar-toggler {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 0.4rem 0.65rem;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.3);
+            outline: none;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(248, 250, 252, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* ═══════════ Page Header ═══════════ */
+        .page-header {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            margin-bottom: 1.75rem;
+        }
+
+        .page-header .breadcrumb {
+            margin-bottom: 0.25rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .page-header .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .page-header .breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        .page-header h1 {
+            font-weight: 700;
+            font-size: 1.65rem;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .page-header .badge-count {
+            background: var(--primary);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        /* ═══════════ Stats Row ═══════════ */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.5rem;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: var(--transition-slow);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .stat-types::after {
+            background: var(--accent-types);
+        }
+        .stat-institutions::after {
+            background: var(--accent-institutions);
+        }
+        .stat-branches::after {
+            background: var(--accent-branches);
+        }
+
+        .stat-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+            border-color: #cbd5e1;
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .stat-types .stat-icon {
+            background: #e0f2fe;
+            color: var(--accent-types);
+        }
+        .stat-institutions .stat-icon {
+            background: #f3e8ff;
+            color: var(--accent-institutions);
+        }
+        .stat-branches .stat-icon {
+            background: #fffbeb;
+            color: var(--accent-branches);
+        }
+
+        .stat-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-number {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            color: var(--text-primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-top: 0.2rem;
+        }
+
+        /* ═══════════ Global Search ═══════════ */
+        .search-wrapper {
+            margin-bottom: 1.5rem;
+            max-width: 400px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.65rem 1rem 0.65rem 2.5rem;
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            font-size: 0.85rem;
+            background: var(--bg-card);
+            transition: var(--transition);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.12);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-box .search-icon {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+
+        /* ═══════════ Content Sections ═══════════ */
+        .content-section {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.75rem;
+            overflow: hidden;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: #f8fafc;
+        }
+
+        .section-header h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-header h2 i {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .btn-create {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-decoration: none;
+            background: var(--primary);
+            color: #fff;
+            transition: var(--transition);
+            border: none;
+            white-space: nowrap;
+        }
+
+        .btn-create:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+            color: #fff;
+        }
+
+        .table-responsive {
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .table {
+            width: 100%;
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.85rem;
+        }
+
+        .table thead th {
+            background: #f1f5f9;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-size: 0.7rem;
+            padding: 0.85rem 1rem;
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .table tbody td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+            color: var(--text-primary);
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table tbody tr {
+            transition: var(--transition);
+        }
+
+        .table tbody tr:hover {
+            background: #f8fafc;
+            transform: scale(1.002);
+        }
+
+        .table tbody tr.hidden-row {
+            display: none;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.65rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .status-active,
+        .status-approved,
+        .status-operational {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .status-inactive,
+        .status-pending,
+        .status-suspended {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.35rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-sm {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.35rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+
+        .btn-view {
+            background: #eff6ff;
+            color: #1e40af;
+            border-color: #bfdbfe;
+        }
+        .btn-view:hover {
+            background: #dbeafe;
+            color: #1e3a8a;
+        }
+
+        .btn-edit {
+            background: #fefce8;
+            color: #854d0e;
+            border-color: #fde68a;
+        }
+        .btn-edit:hover {
+            background: #fef3c7;
+            color: #713f12;
+        }
+
+        .btn-delete {
+            background: #fef2f2;
+            color: #991b1b;
+            border-color: #fecaca;
+        }
+        .btn-delete:hover {
+            background: #fee2e2;
+            color: #7f1d1d;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            opacity: 0.4;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        /* ═══════════ Responsive ═══════════ */
+        @media (max-width: 768px) {
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .table-responsive {
+                padding: 0 1rem 1rem;
+            }
+            .page-header h1 {
+                font-size: 1.3rem;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            .stat-card {
+                padding: 0.9rem 1rem;
+            }
+            .stat-number {
+                font-size: 1.3rem;
+            }
+            .table thead {
+                display: none;
+            }
+            .table tbody td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.6rem 0.8rem;
+            }
+            .table tbody td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: var(--text-secondary);
+                font-size: 0.7rem;
+                text-transform: uppercase;
+                margin-right: 0.5rem;
+            }
+            .table tbody tr {
+                display: block;
+                border-bottom: 1px solid var(--border);
+                margin-bottom: 0.5rem;
+                border-radius: var(--radius-sm);
+                background: #fff;
+            }
+            .action-buttons {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════ Top Navbar ═══════════════ -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fa-solid fa-shield-halved"></i> Admin Portal
+            </a>
+
+            <!-- Mobile Toggle Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navigation Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto gap-1">
+                <li class="nav-item">
+                    <a class="nav-link rounded px-3" href="{% url 'dashboard:admin-dashboard' %}">
+                        <i class="fa-solid fa-newspaper"></i> Back to Dashboard
+                    </a>
+                </li>
+            </ul>
+               
         </div>
-      </div>
-      {% empty %}
-      <div class="col-12">No institutions found.</div>
-      {% endfor %}
     </div>
-  </section>
+</nav>
 
-  <section>
-    <h4>Branch Highlights</h4>
-    <ul class="list-group">
-      {% for b in branches %}
-        <li class="list-group-item d-flex justify-content-between">
-          <div>
-            <strong>{{ b.name }}</strong><br>
-            <small class="text-muted">{{ b.institution.name }} — {{ b.address }}</small>
-          </div>
-          <span class="badge bg-secondary">{{ b.city }}</span>
-        </li>
-      {% empty %}
-        <li class="list-group-item">No branches to show.</li>
-      {% endfor %}
-    </ul>
-  </section>
+<!-- ═══════════════ Page Header ═══════════════ -->
+<div class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-1">
+                <li class="breadcrumb-item"><a href="#"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Institutions</li>
+            </ol>
+        </nav>
+        <h1>
+            <i class="fa-solid fa-building-columns me-2" style="color: var(--primary);"></i>
+            Financial Institutions Management
+            <span class="badge-count" id="totalBadge">{{ institution_types|length|add:institutions|length|add:branches|length }}</span>
+        </h1>
+    </div>
+</div>
+
+<!-- ═══════════════ Main Content ═══════════════ -->
+<main class="container pb-5">
+
+    <!-- ── Stats Row ── -->
+    <div class="stats-row" id="statsRow">
+        <div class="stat-card stat-types" data-stat="types">
+            <div class="stat-icon"><i class="fa-solid fa-tag"></i></div>
+            <div class="stat-info">
+                <span class="stat-number" id="countTypes">{{ institution_types|length }}</span>
+                <span class="stat-label">Institution Types</span>
+            </div>
+        </div>
+        <div class="stat-card stat-institutions" data-stat="institutions">
+            <div class="stat-icon"><i class="fa-solid fa-building"></i></div>
+            <div class="stat-info">
+                <span class="stat-number" id="countInstitutions">{{ institutions|length }}</span>
+                <span class="stat-label">Financial Institutions</span>
+            </div>
+        </div>
+        <div class="stat-card stat-branches" data-stat="branches">
+            <div class="stat-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+            <div class="stat-info">
+                <span class="stat-number" id="countBranches">{{ branches|length }}</span>
+                <span class="stat-label">Branches</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Global Search Box ── -->
+    <div class="search-wrapper">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="globalSearch" placeholder="Search across all tables...">
+        </div>
+    </div>
+
+    <!-- ─────────────── Institution Types Section ─────────────── -->
+    <div class="content-section" id="typesSection">
+        <div class="section-header">
+            <h2>
+                <i class="fa-solid fa-tag"></i>
+                Institution Types
+            </h2>
+            <a href="{% url 'financial_institutions:institution-type-create' %}" class="btn-create">
+                <i class="fa-solid fa-plus"></i> Create Type
+            </a>
+        </div>
+
+        {% if institution_types %}
+        <div class="table-responsive">
+            <table class="table" id="typesTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Created Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for type in institution_types %}
+                    <tr data-search="{{ type.name|lower }} {{ type.description|lower }}">
+                        <td data-label="Name"><strong>{{ type.name }}</strong></td>
+                        <td data-label="Description">{{ type.description|truncatewords:15 }}</td>
+                        <td data-label="Created">{{ type.created_at|date:"Y-m-d" }}</td>
+                        <td data-label="Actions">
+                            <div class="action-buttons">
+                                <a href="{% url 'financial_institutions:institution-type-detail' type.pk %}" class="btn-sm btn-view">
+                                    <i class="fa-solid fa-eye"></i> View
+                                </a>
+                                <a href="{% url 'financial_institutions:institution-type-update' type.pk %}" class="btn-sm btn-edit">
+                                    <i class="fa-solid fa-pen"></i> Edit
+                                </a>
+                                <a href="{% url 'financial_institutions:institution-type-delete' type.pk %}" class="btn-sm btn-delete">
+                                    <i class="fa-solid fa-trash"></i> Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fa-solid fa-inbox"></i>
+            <p>No institution types found</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- ─────────────── Financial Institutions Section ─────────────── -->
+    <div class="content-section" id="institutionsSection">
+        <div class="section-header">
+            <h2>
+                <i class="fa-solid fa-building-columns"></i>
+                Financial Institutions
+            </h2>
+            <a href="{% url 'financial_institutions:institution-create' %}" class="btn-create">
+                <i class="fa-solid fa-plus"></i> Create Institution
+            </a>
+        </div>
+
+        {% if institutions %}
+        <div class="table-responsive">
+            <table class="table" id="institutionsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>License Number</th>
+                        <th>Status</th>
+                        <th>Established Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for institution in institutions %}
+                    <tr data-search="{{ institution.name|lower }} {{ institution.institution_type.name|lower }} {{ institution.license_number|lower }} {{ institution.get_status_display|lower }}">
+                        <td data-label="Name"><strong>{{ institution.name }}</strong></td>
+                        <td data-label="Type">{{ institution.institution_type.name }}</td>
+                        <td data-label="License">{{ institution.license_number }}</td>
+                        <td data-label="Status">
+                            <span class="status-badge status-{{ institution.status }}">
+                                {{ institution.get_status_display }}
+                            </span>
+                        </td>
+                        <td data-label="Established">{{ institution.established_date|date:"Y-m-d"|default:"—" }}</td>
+                        <td data-label="Actions">
+                            <div class="action-buttons">
+                                <a href="{% url 'financial_institutions:institution-detail' institution.pk %}" class="btn-sm btn-view">
+                                    <i class="fa-solid fa-eye"></i> View
+                                </a>
+                                <a href="{% url 'financial_institutions:institution-update' institution.pk %}" class="btn-sm btn-edit">
+                                    <i class="fa-solid fa-pen"></i> Edit
+                                </a>
+                                <a href="{% url 'financial_institutions:institution-delete' institution.pk %}" class="btn-sm btn-delete">
+                                    <i class="fa-solid fa-trash"></i> Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fa-solid fa-inbox"></i>
+            <p>No financial institutions found</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- ─────────────── Branches Section ─────────────── -->
+    <div class="content-section" id="branchesSection">
+        <div class="section-header">
+            <h2>
+                <i class="fa-solid fa-map-location-dot"></i>
+                Branches
+            </h2>
+            <a href="{% url 'financial_institutions:branch-create' %}" class="btn-create">
+                <i class="fa-solid fa-plus"></i> Create Branch
+            </a>
+        </div>
+
+        {% if branches %}
+        <div class="table-responsive">
+            <table class="table" id="branchesTable">
+                <thead>
+                    <tr>
+                        <th>Branch Name</th>
+                        <th>Institution</th>
+                        <th>City</th>
+                        <th>Region</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for branch in branches %}
+                    <tr data-search="{{ branch.branch_name|lower }} {{ branch.institution.name|lower }} {{ branch.city|lower }} {{ branch.region|lower }} {% if branch.is_active %}active{% else %}inactive{% endif %}">
+                        <td data-label="Branch Name"><strong>{{ branch.branch_name }}</strong></td>
+                        <td data-label="Institution">{{ branch.institution.name }}</td>
+                        <td data-label="City">{{ branch.city }}</td>
+                        <td data-label="Region">{{ branch.region }}</td>
+                        <td data-label="Status">
+                            <span class="status-badge {% if branch.is_active %}status-active{% else %}status-inactive{% endif %}">
+                                {% if branch.is_active %}Active{% else %}Inactive{% endif %}
+                            </span>
+                        </td>
+                        <td data-label="Actions">
+                            <div class="action-buttons">
+                                <a href="{% url 'financial_institutions:branch-detail' branch.pk %}" class="btn-sm btn-view">
+                                    <i class="fa-solid fa-eye"></i> View
+                                </a>
+                                <a href="{% url 'financial_institutions:branch-update' branch.pk %}" class="btn-sm btn-edit">
+                                    <i class="fa-solid fa-pen"></i> Edit
+                                </a>
+                                <a href="{% url 'financial_institutions:branch-delete' branch.pk %}" class="btn-sm btn-delete">
+                                    <i class="fa-solid fa-trash"></i> Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fa-solid fa-inbox"></i>
+            <p>No branches found</p>
+        </div>
+        {% endif %}
+    </div>
+
 </main>
-{% endblock %}
+
+<!-- ═══════════════ Scripts ═══════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('globalSearch');
+        const allRows = document.querySelectorAll('table tbody tr[data-search]');
+
+        // ── Live Search across all tables ──
+        function filterTables() {
+            const query = searchInput.value.toLowerCase().trim();
+
+            allRows.forEach(row => {
+                const searchData = row.getAttribute('data-search') || '';
+                if (query === '' || searchData.includes(query)) {
+                    row.classList.remove('hidden-row');
+                } else {
+                    row.classList.add('hidden-row');
+                }
+            });
+
+            // Show/hide empty state for each table if needed (optional)
+            document.querySelectorAll('.content-section').forEach(section => {
+                const table = section.querySelector('table');
+                if (table) {
+                    const visibleRows = table.querySelectorAll('tbody tr:not(.hidden-row)');
+                    const emptyMessage = section.querySelector('.empty-state');
+                    if (visibleRows.length === 0 && query !== '') {
+                        if (!emptyMessage) {
+                            const msgDiv = document.createElement('div');
+                            msgDiv.className = 'empty-state';
+                            msgDiv.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i><p>No matching records</p>';
+                            table.parentElement.appendChild(msgDiv);
+                        }
+                    } else {
+                        const existingMsg = section.querySelector('.empty-state');
+                        if (existingMsg && existingMsg.querySelector('.fa-magnifying-glass')) {
+                            existingMsg.remove();
+                        }
+                    }
+                }
+            });
+        }
+
+        searchInput.addEventListener('input', filterTables);
+
+        // ── Keyboard shortcut: Ctrl+K to focus search ──
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+                searchInput.select();
+            }
+            if (e.key === 'Escape' && document.activeElement === searchInput) {
+                searchInput.value = '';
+                filterTables();
+                searchInput.blur();
+            }
+        });
+
+        // ── Stat cards click to scroll to section ──
+        document.querySelector('.stat-types')?.addEventListener('click', () => {
+            document.getElementById('typesSection').scrollIntoView({ behavior: 'smooth' });
+        });
+        document.querySelector('.stat-institutions')?.addEventListener('click', () => {
+            document.getElementById('institutionsSection').scrollIntoView({ behavior: 'smooth' });
+        });
+        document.querySelector('.stat-branches')?.addEventListener('click', () => {
+            document.getElementById('branchesSection').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        console.log('🏦 Financial Institutions Dashboard ready. Use Ctrl+K to search.');
+    });
+</script>
+
+</body>
+</html>

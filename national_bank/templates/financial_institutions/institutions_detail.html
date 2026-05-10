@@ -1,44 +1,20 @@
 {% extends 'core/base.html' %}
-{% block content %}
-<main class="container my-5">
-	<a href="{% url 'financial_institutions:institution-list' %}" class="btn btn-link mb-3">← Back to institutions</a>
-	<div class="row">
-		<div class="col-md-8">
-			<div class="card mb-3">
-				<div class="card-body">
-					<h2 class="card-title">{{ institution.name }}</h2>
-					<p class="text-muted">Type: {{ institution.type.name }}</p>
-					<p>{{ institution.description }}</p>
-				</div>
-			</div>
 
-			<h4>Branches</h4>
-			<ul class="list-group mb-3">
-				{% for b in institution.branches.all %}
-					<li class="list-group-item d-flex justify-content-between align-items-center">
-						<div>
-							<strong>{{ b.name }}</strong><br>
-							<small class="text-muted">{{ b.address }}</small>
-						</div>
-						<div>
-							<a href="{% url 'financial_institutions:branch-edit' b.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
-						</div>
-					</li>
-				{% empty %}
-					<li class="list-group-item">No branches available.</li>
-				{% endfor %}
-			</ul>
-		</div>
-		<div class="col-md-4">
-			<div class="card">
-				<div class="card-body">
-					<h5>Contact</h5>
-					<p class="mb-1">Phone: {{ institution.phone }}</p>
-					<p class="mb-1">Email: {{ institution.email }}</p>
-					<p class="mb-0">Website: <a href="{{ institution.website }}">{{ institution.website }}</a></p>
-				</div>
-			</div>
-		</div>
-	</div>
-</main>
+{% block title %}Financial Institution Detail - National Bank{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+	<h1>{{ institution.name }}</h1>
+	<p><strong>Type:</strong> {{ institution.get_institution_type_display }}</p>
+	<p><strong>License Number:</strong> {{ institution.license_number }}</p>
+	<p><strong>Established Date:</strong> {{ institution.established_date }}</p>
+	<p><strong>Head Office Address:</strong> {{ institution.head_office_address }}</p>
+	<p><strong>Phone Number:</strong> {{ institution.contact_phone }}</p>
+	<p><strong>Email:</strong> {{ institution.contact_email }}</p>
+	<p><strong>Website:</strong> <a href="{{ institution.website }}" target="_blank" rel="noopener noreferrer">{{ institution.website }}</a></p>
+	<p><strong>capital:</strong> {{ institution.capital_amount }}</p>
+	<p><strong>status:</strong> {{ institution.status }}</p>
+</div>
+
 {% endblock %}

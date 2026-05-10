@@ -4,21 +4,19 @@ from . import views
 app_name = 'financial_institutions'
 
 urlpatterns = [
-    # Institution types (admin)
-    path('types/', views.InstitutionTypeListView.as_view(), name='type-list'),
-    path('types/create/', views.InstitutionTypeCreateView.as_view(), name='type-create'),
-    path('types/<int:pk>/edit/', views.InstitutionTypeUpdateView.as_view(), name='type-update'),
-    path('types/<int:pk>/delete/', views.InstitutionTypeDeleteView.as_view(), name='type-delete'),
-
-    # Institutions
-    path('institutions/', views.InstitutionListView.as_view(), name='institution-list'),
+    path('institutions/', views.InstitutionPageView.as_view(), name='institution-page'),
+    path('institutions/<int:pk>/', views.InstitutionDetailView.as_view(), name='institution-detail'),
     path('institutions/create/', views.InstitutionCreateView.as_view(), name='institution-create'),
-    path('institutions/<slug:slug>/', views.InstitutionDetailView.as_view(), name='institution-detail'),
-    path('institutions/<slug:slug>/edit/', views.InstitutionUpdateView.as_view(), name='institution-update'),
-    path('institutions/<slug:slug>/delete/', views.InstitutionDeleteView.as_view(), name='institution-delete'),
-    path('institutions/<slug:slug>/branches/', views.BranchListView.as_view(), name='branch-list'),
-    path('institutions/<slug:slug>/branches/create/', views.BranchCreateView.as_view(), name='branch-create'),
-    path('institutions/<slug:slug>/branches/<int:pk>/edit/', views.BranchUpdateView.as_view(), name='branch-update'),
-    path('institutions/<slug:slug>/branches/<int:pk>/delete/', views.BranchDeleteView.as_view(), name='branch-delete'),
-    path('institutions/<slug:slug>/dashboard/', views.InstitutionDashboardView.as_view(), name='institution-dashboard'),
+    path('institutions/<int:pk>/update/', views.InstitutionUpdateView.as_view(), name='institution-update'),
+    path('institutions/<int:pk>/delete/', views.InstitutionDeleteView.as_view(), name='institution-delete'),
+    path('branches/<int:pk>/', views.BranchDetailView.as_view(), name='branch-detail'),
+    path('branches/create/', views.BranchCreateView.as_view(), name='branch-create'),
+    path('branches/<int:pk>/update/', views.BranchUpdateView.as_view(), name='branch-update'),
+    path('branches/<int:pk>/delete/', views.BranchDeleteView.as_view(), name='branch-delete'),
+    path('institution-types/<int:pk>/', views.InstitutionTypeDetailView.as_view(), name='institution-type-detail'),
+    path('institution-types/create/', views.InstitutionTypeCreateView.as_view(), name='institution-type-create'),
+    path('institution-types/<int:pk>/update/', views.InstitutionTypeUpdateView.as_view(), name='institution-type-update'),
+    path('institution-types/<int:pk>/delete/', views.InstitutionTypeDeleteView.as_view(), name='institution-type-delete'),
+
 ]
+

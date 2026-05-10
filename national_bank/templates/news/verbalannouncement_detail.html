@@ -1,13 +1,37 @@
 {% extends 'core/base.html' %}
 {% block content %}
-<main class="container my-5">
-	<a href="{% url 'news:verbalannouncement-list' %}" class="btn btn-link mb-3">← Back to announcements</a>
-	<div class="card">
-		<div class="card-body">
-			<h2 class="card-title">{{ announcement.title }}</h2>
-			<p class="text-muted">{{ announcement.published_at|date:'F j, Y' }}</p>
-			<div class="content">{{ announcement.content|safe }}</div>
-		</div>
-	</div>
-</main>
+
+<body>
+    <h1>{{ announcement.title }}</h1>
+
+    <div class="meta">
+        By {{ announcement.author.get_full_name|default:announcement.author.username }}
+        | Published: {% if announcement.is_published %}Yes{% else %}No{% endif %}
+        <br>
+        Created: {{ announcement.created_at|date:"F j, Y" }}
+        | Updated: {{ announcement.updated_at|date:"F j, Y" }}
+    </div>
+
+    <div class="description">
+        <p>{{ announcement.short_description|linebreaksbr }}</p>
+    </div>
+
+    <div class="date-box">
+        📅 Announcement date: {{ announcement.announcement_date|date:"F j, Y" }}
+    </div>
+
+    {% if announcement.audio_file %}
+        <audio controls preload="metadata">
+            <source src="{{ announcement.audio_file.url }}" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    {% endif %}
+
+    <div class="transcript">
+        <strong>Transcript:</strong>
+        {{ announcement.transcript|linebreaks }}
+    </div>
+
+    <p style="margin-top: 2rem;"><a href="javascript:history.back()">← Back</a></p>
+</body>
 {% endblock %}

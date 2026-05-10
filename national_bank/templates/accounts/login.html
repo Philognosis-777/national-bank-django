@@ -1,27 +1,213 @@
-{% extends 'core/base.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
 
-{% block content %}
-<main class="container my-5">
-	<div class="row justify-content-center">
-		<div class="col-md-6">
-			<div class="card">
-				<div class="card-body">
-					<h3 class="card-title mb-3">Sign In</h3>
-					<form method="post" novalidate>
-						{% csrf_token %}
-						{% if form.non_field_errors %}
-							<div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>
-						{% endif %}
-						{{ form.as_p }}
-						<div class="d-flex justify-content-between align-items-center mt-3">
-							<button type="submit" class="btn btn-primary">Log in</button>
-							<a href="{% url 'accounts:register' %}" class="btn btn-link">Create account</a>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-</main>
-{% endblock %}
+    <style>
+        /* ===== LOGIN PAGE WRAPPER ===== */
+        .login-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--nbe-blue) 0%, var(--nbe-blue-dark) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(200,169,81,0.12), transparent 40%),
+                        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.08), transparent 50%);
+        }
+
+        /* ===== LOGIN CARD ===== */
+        .login-card {
+            width: 100%;
+            max-width: 460px;
+            background: rgba(255,255,255,0.95);
+            border-radius: var(--nbe-radius);
+            box-shadow: var(--nbe-shadow-hover);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            animation: fadeUp 0.8s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== HEADER ===== */
+        .login-header {
+            background: linear-gradient(135deg, var(--nbe-blue), var(--nbe-blue-dark));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .login-header h3 {
+            font-weight: 700;
+        }
+
+        .login-header p {
+            opacity: 0.85;
+            margin-top: 5px;
+        }
+
+        /* ===== FORM ===== */
+        .login-body {
+            padding: 2rem;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid var(--nbe-gray-200);
+            padding: 12px;
+            transition: var(--nbe-transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--nbe-gold);
+            box-shadow: 0 0 0 0.2rem rgba(200,169,81,0.25);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--nbe-blue);
+        }
+
+        /* ===== BUTTON ===== */
+        .btn-nbe {
+            background: var(--nbe-gold);
+            color: var(--nbe-blue);
+            font-weight: 700;
+            border-radius: 50px;
+            padding: 12px;
+            transition: var(--nbe-transition);
+            border: none;
+        }
+
+        .btn-nbe:hover {
+            background: var(--nbe-gold-light);
+            transform: translateY(-2px);
+            box-shadow: var(--nbe-shadow-hover);
+        }
+
+        /* ===== LINKS ===== */
+        .login-body a {
+            color: var(--nbe-blue);
+            transition: var(--nbe-transition);
+        }
+
+        .login-body a:hover {
+            color: var(--nbe-gold);
+        }
+
+        /* ===== SMALL ANIMATION ===== */
+        .fade-in {
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+
+<section class="login-section">
+    <div class="login-card">
+
+        <!-- HEADER -->
+        <div class="login-header">
+            <h3>
+                <i class="fas fa-sign-in-alt me-2"></i>
+                <span class="english">Welcome Back</span>
+                <span class="amharic">እንኳን ደህና መጡ</span>
+            </h3>
+            <p>
+                <span class="english">Sign in to your account</span>
+                <span class="amharic">ወደ መለያዎ ይግቡ</span>
+            </p>
+        </div>
+
+        <!-- BODY -->
+        <div class="login-body">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- USERNAME -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-user me-1"></i>
+                        <span class="english">Username</span>
+                        <span class="amharic">የተጠቃሚ ስም</span>
+                    </label>
+                    <input type="text" name="username" class="form-control" placeholder="Enter username">
+                </div>
+
+                <!-- PASSWORD -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-lock me-1"></i>
+                        <span class="english">Password</span>
+                        <span class="amharic">የይለፍ ቃል</span>
+                    </label>
+                    <input type="password" name="password" class="form-control" placeholder="Enter password">
+                </div>
+
+                <!-- REMEMBER -->
+                <div class="d-flex justify-content-between mb-3">
+                    <div>
+                        <input type="checkbox">
+                        <small>Remember me</small>
+                    </div>
+                    <a href="#">Forgot?</a>
+                </div>
+
+                <!-- BUTTON -->
+                <button class="btn btn-nbe w-100">
+                    <i class="fas fa-sign-in-alt me-2"></i>
+                    <span class="english">Sign In</span>
+                    <span class="amharic">ግባ</span>
+                </button>
+            </form>
+
+            <!-- REGISTER -->
+            <div class="text-center mt-3">
+                <small>
+                    <span class="english">No account?</span>
+                    <span class="amharic">መለያ የለዎትም?</span>
+                    <a href="{% url 'accounts:register' %}">Create one</a>
+                </small>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    // Smooth entrance animation trigger
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelector(".login-card").classList.add("fade-in");
+    });
+</script>
+
+<script src="{% static 'core/js/base.js' %}"></script>
+</body>
+</html>

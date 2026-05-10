@@ -1,0 +1,12 @@
+<html>
+
+<div class="container py-4">
+    <h1>Confirm Delete</h1>
+    <p>Are you sure you want to delete the verbal announcement titled "{{ verbal_announcement.title }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="{% url 'news:verbal-announcement-detail' verbal_announcement.pk %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+</html>

@@ -24,15 +24,15 @@ urlpatterns = [
     path('', include('core.urls', namespace='core')),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     # News backend routes (paper, video, announcements)
-    path('', include('news.urls', namespace='news')),
+    path('news/', include('news.urls', namespace='news')),
     # Market app routes (rates and indicators)
-    path('', include('market.urls', namespace='market')),
+    path('market/', include('market.urls', namespace='market')),
     # Financial institutions routes (types, institutions, branches)
-    path('', include('financial_institutions.urls', namespace='financial_institutions')),
+    path('financial-institutions/', include('financial_institutions.urls', namespace='financial_institutions')),
     # Dashboard routes (under /dashboard/ to avoid conflict with Django admin)
     path('dashboard/', include('dashboard.urls', namespace='dashboard')),
     # Notifications
-    path('', include('notifications.urls', namespace='notifications')),
+    path('notifications/', include('notifications.urls', namespace='notifications')),
 ]
  
 if settings.DEBUG:

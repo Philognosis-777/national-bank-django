@@ -1,0 +1,16 @@
+<html>
+
+
+{% block title %}Institution Type Form - National Bank{% endblock %}
+
+<div class="container py-4">
+	<h1>{% if form.instance.pk %}Edit{% else %}Create{% endif %} Institution Type</h1>
+	<form method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit" class="btn btn-primary">{% if form.instance.pk %}Update{% else %}Create{% endif %}</button>
+		<a href="{% url 'financial_institutions:institution-page' %}" class="btn btn-secondary">Cancel</a>
+	</form>
+</div>
+</html>
+

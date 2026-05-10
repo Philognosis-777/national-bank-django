@@ -18,4 +18,5 @@ urlpatterns = [
     path('branch-locator/', views.BranchLocatorView.as_view(), name='branch-locator'),
     path('faqs/', views.FAQsView.as_view(), name='faqs'),
     path('hamburger/', views.HamburgerView.as_view(), name='hamburger'),
+
 ]

@@ -1,0 +1,14 @@
+{% extends "core/base.html" %}
+{% block title %}Confirm Delete - Paper News{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1>Confirm Delete</h1>
+    <p>Are you sure you want to delete the paper news titled "{{ paper_news.title }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="{% url 'news:paper-news-detail' paper_news.pk %}" class="btn btn-secondary">Cancel</a>
+    </form> 
+</div>
+{% endblock %}
